@@ -8,7 +8,9 @@ SOURCES += main.cpp \
     Logger.cpp \
     Parser.cpp \
     Piece.cpp \
-    PieceListText.cpp
+    PieceListText.cpp \
+    Viewer.cpp \
+    UpdateEvent.cpp
 
 RESOURCES += qml.qrc
 
@@ -39,4 +41,9 @@ HEADERS += \
     Logger.h \
     Parser.h \
     Piece.h \
-    PieceListText.h
+    PieceListText.h \
+    Viewer.h \
+    UpdateEvent.h \
+    Line.h \
+    Position.h \
+    Selection.h

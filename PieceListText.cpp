@@ -19,6 +19,19 @@ PieceListText::PieceListText()
 	mFileName = "";
 }
 
+PieceListText::~PieceListText()
+{
+    Piece * piece = mFirstPiece;
+    Piece * tmp = piece;
+
+    while (piece != nullptr)
+    {
+        tmp = piece->getNext();
+        delete piece;
+        piece = tmp;
+    }
+}
+
 void PieceListText::insert(size_t pos, char c)
 {
 	Piece * p = split(pos); 
@@ -106,4 +119,22 @@ bool PieceListText::load(std::string const& file)
 bool PieceListText::save()
 {
 	return Parser::writeFile(mFileName, mFirstPiece);
+}
+
+void PieceListText::addListener(UpdateEventListener * listener)
+{
+    mListeners.push_back(listener);
+}
+
+void PieceListText::removeListener(UpdateEventListener * listener)
+{
+    TListenersIter iter = std::find(mListeners.begin(), mListeners.end(), listener);
+    if (iter != mListeners.end())
+        mListeners.erase(iter);
+}
+
+void PieceListText::notify(UpdateEvent e)
+{
+    for (UpdateEventListener * listener : mListeners)
+        listener->update(e);
 }

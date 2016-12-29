@@ -2,12 +2,15 @@
 #define PIECELISTTEXT_H
 
 #include "Piece.h"
+#include "UpdateEvent.h"
 
+#include <vector>
 
 class PieceListText
 {
 public:
     PieceListText();
+    ~PieceListText();
 
     // basic
     void insert(size_t pos, char c);
@@ -21,6 +24,9 @@ public:
 	Piece * getFirst() const;
 	size_t getLength() const;
 
+    // listeners
+    void addListener(UpdateEventListener * listener);
+    void removeListener(UpdateEventListener * listener);
 
 private:
     size_t mLength;
@@ -28,6 +34,12 @@ private:
     std::string mScratchFileName;
 	std::fstream mScratchFileStream;
 	std::string mFileName;
+
+    typedef std::vector<UpdateEventListener*> TListeners;
+    typedef std::vector<UpdateEventListener*>::iterator TListenersIter;
+
+    TListeners mListeners;
+    void notify(UpdateEvent e);
 };
 
 #endif // PIECELISTTEXT_H
