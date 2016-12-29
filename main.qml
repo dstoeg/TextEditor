@@ -1,6 +1,5 @@
-import QtQuick 2.4
+import QtQuick 2.5
 import QtQuick.Controls 1.3
-import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.2
@@ -146,7 +145,12 @@ ApplicationWindow {
                 ctx.beginPath();
                 ctx.text("test", centreX, centreY);
                 ctx.stroke();
+
+                ctx.font = "10px arial";
+                ctx.text("test", centreX, centreY+20);
+                ctx.stroke();
             }
         }
     }
 }
+
