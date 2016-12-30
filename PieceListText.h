@@ -16,6 +16,7 @@ public:
     void insert(size_t pos, char c);
     Piece * split(size_t pos);
     void delete_(size_t from, size_t to);
+    char charAt(size_t pos);
 
     // load / store
     bool load(std::string const& file);

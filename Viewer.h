@@ -18,6 +18,15 @@ public:
 
     // GUI event handlers
     Q_INVOKABLE bool OnLoadFile(QString str);
+    Q_INVOKABLE bool OnSaveFile(QString file);
+    Q_INVOKABLE void OnCut();
+    Q_INVOKABLE void OnCopy();
+    Q_INVOKABLE void OnPaste();
+    Q_INVOKABLE void OnFind(QString str);
+    Q_INVOKABLE void OnFontChanged(QString font);
+    Q_INVOKABLE void OnFontSizeChanged(int size);
+    Q_INVOKABLE void OnFontStyleChanged(bool bold, bool italic, bool underlined);
+
 
     // mouse handling
     Q_INVOKABLE void OnMouseClicked(int x, int y);
@@ -27,6 +36,7 @@ public:
     // keyboard handling
     Q_INVOKABLE void OnKeyPressed(int key);
     Q_INVOKABLE void OnKeyTyped(int key);
+
 
     // TODO: scrolling
     // TODO: position handling

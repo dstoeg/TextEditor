@@ -16,7 +16,9 @@ MenuBar {
             }
             MenuItem {
                 text: qsTr("Save")
-                onTriggered: messageDialog.show(qsTr("Save action triggered"));
+                onTriggered: {
+                    viewer.OnSaveFile("");
+                }
             }
             MenuItem {
                 text: qsTr("Exit")
@@ -27,15 +29,15 @@ MenuBar {
             title: qsTr("Edit")
             MenuItem {
                 text: qsTr("Cut")
-                onTriggered: messageDialog.show(qsTr("Cut action triggered"));
+                onTriggered: viewer.OnCut();
             }
             MenuItem {
                 text: qsTr("Copy")
-                onTriggered: messageDialog.show(qsTr("Copy action triggered"));
+                onTriggered: viewer.OnCopy();
             }
             MenuItem {
                 text: qsTr("Paste")
-                onTriggered: messageDialog.show(qsTr("Paste action triggered"));
+                onTriggered: viewer.OnPaste();
             }
         }
     }

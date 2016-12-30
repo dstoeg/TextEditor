@@ -121,9 +121,15 @@ Line * Viewer::fill(size_t top, size_t bottom, size_t pos)
 
 void Viewer::paint()
 {
-    drawString("test", 20, 20, "20px sans-serif", 0);
+    drawString("test", 20, 20, "30px Arial", 0);
 
-    drawString("anotherTest", 20, 100, "50px monospace", 0);
+    drawString("test", 20, 50, "30px Verdana", 0);
+
+    drawString("test", 20, 80, "30px Impact", 0);
+
+    drawString("test", 20, 110, "30px Calibri", 0);
+
+    drawString("test", 20, 140, "30px Garamond", 0);
 
     /*
     if (firstLine == nullptr) {
@@ -150,4 +156,47 @@ void Viewer::drawString(std::string const& s, size_t x, size_t y, std::string co
                               Q_ARG(QVariant, y),
                               Q_ARG(QVariant, qfont),
                               Q_ARG(QVariant, style));
+}
+
+
+bool Viewer::OnSaveFile(QString file)
+{
+    return true;
+}
+
+void Viewer::OnCut()
+{
+    qDebug() << "cut";
+}
+
+void Viewer::OnCopy()
+{
+    qDebug() << "copy";
+}
+
+void Viewer::OnPaste()
+{
+    qDebug() << "paste";
+}
+
+void Viewer::OnFind(QString str)
+{
+    qDebug() << "find: " << str;
+}
+
+void Viewer::OnFontChanged(QString font)
+{
+    qDebug() << font;
+}
+
+void Viewer::OnFontSizeChanged(int size)
+{
+    qDebug() << size;
+}
+
+void Viewer::OnFontStyleChanged(bool bold, bool italic, bool underlined)
+{
+    qDebug() << "bold " << bold;
+    qDebug() << "italic " << italic;
+    qDebug() << "underlined " << underlined;
 }

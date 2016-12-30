@@ -8,23 +8,46 @@ ToolBar {
     RowLayout {
         anchors.fill: parent
 
-        Item { Layout.preferredWidth: 10}
+        Item { Layout.preferredWidth: 5}
 
         RowLayout {
+
             ComboBox {
                 currentIndex: 0
+                Layout.preferredWidth: 180
                 model: ListModel {
                     id: cbItems
-                    ListElement { text: "Font1";}
-                    ListElement { text: "Font2";}
-                    ListElement { text: "Font3";}
+
+                    ListElement { text: "Calibri";}
+                    ListElement { text: "Garamond";}
+                    ListElement { text: "Impact";}
+                    ListElement { text: "Verdana";}
+                    ListElement { text: "Arial";}
                 }
-                width: 200
-                onCurrentIndexChanged: ;
+
+                onCurrentIndexChanged: viewer.OnFontChanged(currentText);
             }
 
-            TextField {
-                text: "10"
+            ComboBox {
+                currentIndex: 0
+                Layout.preferredWidth: 80
+
+                model: ListModel {
+                    id: cbSize
+
+                    ListElement { text: 10;}
+                    ListElement { text: 20;}
+                    ListElement { text: 30;}
+                    ListElement { text: 40;}
+                    ListElement { text: 50;}
+                }
+
+                onCurrentIndexChanged: viewer.OnFontSizeChanged(currentText);
+            }
+
+            function styleChanged()
+            {
+                viewer.OnFontStyleChanged(boldButton.checked, italicButton.checked, underlineButton.checked);
             }
 
             ToolButton {
@@ -32,7 +55,7 @@ ToolBar {
                 text: "B" // icon-bold
                 checkable: true
                 checked: false
-                onClicked: ;
+                onClicked: parent.styleChanged();
                 Layout.preferredWidth: 30
                 style: ButtonStyle {
                     label: Text {
@@ -48,7 +71,7 @@ ToolBar {
                 text: "I" // icon-italic
                 checkable: true
                 checked: false
-                onClicked: ;
+                onClicked: parent.styleChanged();
                 Layout.preferredWidth: 30
                 style: ButtonStyle {
                     label: Text {
@@ -64,7 +87,7 @@ ToolBar {
                 text: "U" // icon-underline
                 checkable: true
                 checked: false
-                onClicked: ;
+                onClicked: parent.styleChanged();
                 Layout.preferredWidth: 30
                 style: ButtonStyle {
                     label: Text {
@@ -79,11 +102,14 @@ ToolBar {
 
 
         RowLayout {
+            property string text: ""
+
             TextField {
-                text: ""
+                onTextChanged: parent.text = text;
             }
             ToolButton {
                 text: "Find"
+                onClicked: viewer.OnFind(parent.text);
             }
         }
     }

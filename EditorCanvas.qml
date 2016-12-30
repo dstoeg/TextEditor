@@ -41,6 +41,7 @@ Canvas {
         var ctx = getContext("2d");
         //ctx.reset();
         ctx.font = font;
+
         ctx.fillText(qsTr(text), x, y);
     }
 

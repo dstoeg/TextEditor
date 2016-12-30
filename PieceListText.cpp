@@ -83,6 +83,28 @@ void PieceListText::delete_(size_t from, size_t to)
 	a->setNext(b->getNext());
 }
 
+char PieceListText::charAt(size_t pos)
+{
+    if (pos >= mLength)
+        return '\0';
+
+    size_t count = 0;
+    Piece * piece = mFirstPiece;
+
+    while (piece != nullptr)
+    {
+        if (pos < count + piece->getLength())
+        {
+            // in this piece
+            return piece->getText()[pos - count];
+        }
+        count += piece->getLength();
+        piece = piece->getNext();
+    }
+    assert(false);
+    return  '\0';
+}
+
 Piece * PieceListText::getFirst() const
 {
 	return mFirstPiece;
