@@ -1,6 +1,7 @@
 #ifndef PIECE_H
 #define PIECE_H
 
+#include <QFont>
 #include <string>
 #include <fstream>
 
@@ -9,6 +10,7 @@ class Piece
 public:
     Piece();
     Piece(std::string file, size_t length, size_t pos, Piece * next, bool dummy = false);
+    Piece(std::string file, size_t length, size_t pos, Piece * next, QFont font, bool dummy = false);
 
     void setNext(Piece * next);
     Piece * getNext() const;
@@ -21,10 +23,8 @@ public:
 	std::string getFile() const;
 	size_t getFilePos() const;
 
-	std::string getFont() const;
-
-	std::string getStyle() const;
-
+    QFont getFont() const;
+    void setFont(QFont const& font);
 
 private:
     size_t mLength;
@@ -33,9 +33,7 @@ private:
 	size_t mFilePos;
     Piece * mNext;
 	bool mIsDummy;
-
-    // TODO: Font
-    // TODO: Style
+    QFont mFont;
 
 };
 

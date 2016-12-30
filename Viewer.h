@@ -27,7 +27,6 @@ public:
     Q_INVOKABLE void OnFontSizeChanged(int size);
     Q_INVOKABLE void OnFontStyleChanged(bool bold, bool italic, bool underlined);
 
-
     // mouse handling
     Q_INVOKABLE void OnMouseClicked(int x, int y);
     Q_INVOKABLE void OnMouseDragged(int x, int y);
@@ -37,16 +36,18 @@ public:
     Q_INVOKABLE void OnKeyPressed(int key);
     Q_INVOKABLE void OnKeyTyped(int key);
 
+    // caret handling
+    void invertCaret();
+    void setCaret(Position pos);
+    void setCaret(size_t tpos);
+    void setCaret(size_t x, size_t y);
+    void removeCaret();
 
     // TODO: scrolling
-    // TODO: position handling
-    // TODO: caret handling
+    // TODO: position handling  
     // TODO: selection handling
     // TODO: tab handling
     // TODO: line handling
-
-    Q_INVOKABLE QString testToGui();
-    void testFromGui();
 
     // TODO: text drawing
     virtual void update(UpdateEvent e) override;
@@ -69,13 +70,15 @@ private:
     size_t mFirstTpos;       // first text position in this viewer
     size_t mLastTpos;        // last text position in this viewer
     Selection * mSel;
-    Position * mCaret;
+    Position mCaret;
+    bool mCaretVisible;
     Position * mLastPos;     // last mouse position: used during mouse dragging
-    //Graphics g;
 
     // functions
     Line * fill(size_t top, size_t bottom, size_t pos);
-    void drawString(std::string const& s, size_t x, size_t y, std::string const& font, int style);
+    void drawString(std::string const& s, size_t x, size_t y, std::string const& font);
+
+    Position Pos(size_t x, size_t y);
 
 };
 

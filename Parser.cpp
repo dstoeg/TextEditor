@@ -2,6 +2,8 @@
 #include "Parser.h"
 #include "Helpers.h"
 
+#include <QDebug>
+
 #include <fstream>
 #include <cassert>
 #include <sstream>
@@ -36,9 +38,10 @@ Piece * Parser::parseFile(std::string const& file, size_t & length)
 				int len = parseNextInt(f);
 				std::string font = parseNextString(f);
 				std::string style = parseNextString(f);
+                QFont qfont = parseFont(font, style);
 				
 				// append new piece
-				Piece * piece = new Piece(file, len, pos, nullptr);
+                Piece * piece = new Piece(file, len, pos, nullptr, qfont);
 				pos += len;
 				previous->setNext(piece);
 				previous = piece;
@@ -85,9 +88,9 @@ bool Parser::writeFile(std::string const& file, Piece * first)
 		text << piece->getText();
 
 		// add meta info
-		info << piece->getLength() << ";";
-		info << piece->getFont()   << ";";
-		info << piece->getStyle()  << ";";
+        info << piece->getLength()                      << ";";
+        info << qfontToFontString(piece->getFont())     << ";";
+        info << qfontToStyleString(piece->getFont())    << ";";
 
 		piece = piece->getNext();
 	}
@@ -126,4 +129,63 @@ std::string Parser::parseNextString(std::ifstream & file)
 		c = file.get();
 	}
 	return s.str();
+}
+
+std::string Parser::qfontToFontString(QFont font)
+{
+    std::string fontStr;
+    fontStr.append(std::to_string(font.pixelSize()));
+    fontStr.append("px ");
+    fontStr.append(font.family().toStdString());
+    return std::string(fontStr);
+}
+
+std::string Parser::qfontToStyleString(QFont font)
+{
+    std::string style;
+    if(font.bold())
+        style.push_back('b');
+    if(font.italic())
+        style.push_back('i');
+    if(font.underline())
+        style.push_back('u');
+    return style;
+}
+
+QFont Parser::parseFont(std::string const& font, std::string const& style)
+{
+    QFont qFont;
+
+    size_t idx = font.find("px");
+    int size = std::stoi(font.substr(0, idx));
+    qFont.setPixelSize(size);
+
+    idx = font.find(' ') + 1;
+    std::string family = font.substr(idx, font.size()-1);
+    qFont.setFamily(QString::fromStdString(family));
+
+    if (style.find('b') != std::string::npos)
+        qFont.setBold(true);
+    if (style.find('i') != std::string::npos)
+        qFont.setItalic(true);
+    if (style.find('u') != std::string::npos)
+        qFont.setUnderline(true);
+
+    return qFont;
+}
+
+std::string Parser::getFontAsString(QFont const& font)
+{
+    std::string fontStr;
+
+    if (font.italic())
+        fontStr.append("italic ");
+    if (font.bold())
+        fontStr.append("bold ");
+    /* underline not supported */
+
+    fontStr.append(std::to_string(font.pixelSize()) + "px ");
+    fontStr.append(font.family().toStdString());
+
+    return fontStr;
 }

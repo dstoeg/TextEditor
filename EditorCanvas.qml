@@ -36,13 +36,34 @@ Canvas {
         event.accepted = true;
     }
 
-    function drawString(text, x, y, font, style)
+    function drawString(text, x, y, font)
     {
         var ctx = getContext("2d");
         //ctx.reset();
         ctx.font = font;
-
         ctx.fillText(qsTr(text), x, y);
+    }
+
+    property bool caret: false;
+
+    function invertCaret(caretX, caretY)
+    {
+        caret = !caret;
+        var ctx = getContext("2d");
+        ctx.strokeStyle = caret ? "black" : "white";
+
+        var x = caretX;
+        var y = caretY;
+        ctx.beginPath();
+        for (var i = 8; i>0; i--)
+        {
+            ctx.moveTo(x, y)
+            ctx.lineTo(x, y+i);
+            x++;
+            y++;
+            ctx.stroke();
+        }
+
     }
 
     onPaint: {

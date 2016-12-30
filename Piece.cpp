@@ -19,6 +19,19 @@ Piece::Piece(std::string file, size_t length, size_t pos, Piece * next, bool dum
 	mNext = next;
 	mFileStream.open(mFileName);
 	mIsDummy = dummy;
+
+    // default font Calibri 20px
+    mFont.setFamily("Calibri");
+    mFont.setPixelSize(20);
+    mFont.setBold(false);
+    mFont.setItalic(false);
+    mFont.setUnderline(false);
+}
+
+Piece::Piece(std::string file, size_t length, size_t pos, Piece * next, QFont font, bool dummy)
+    : Piece(file, length, pos, next, dummy)
+{
+    mFont = font;
 }
 
 void Piece::setNext(Piece * next)
@@ -80,12 +93,13 @@ size_t Piece::getFilePos() const
 	return mFilePos;
 }
 
-std::string Piece::getFont() const
+QFont Piece::getFont() const
 {
-	return "font1";
+    return mFont;
 }
 
-std::string Piece::getStyle() const
+void Piece::setFont(QFont const& font)
 {
-	return "sty";
+    mFont = font;
 }
+

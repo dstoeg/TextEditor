@@ -50,6 +50,7 @@ void PieceListText::insert(size_t pos, char c)
 
 	p->setLength(p->getLength() + 1);
 	mLength++;
+    notify(UpdateEvent(pos, pos, std::to_string(c)));
 }
 
 Piece * PieceListText::split(size_t pos)
@@ -81,6 +82,7 @@ void PieceListText::delete_(size_t from, size_t to)
 	Piece * a = split(from);
 	Piece * b = split(to);
 	a->setNext(b->getNext());
+    notify(UpdateEvent(from, to, nullptr));
 }
 
 char PieceListText::charAt(size_t pos)
@@ -127,6 +129,7 @@ bool PieceListText::load(std::string const& file)
 		mLength = length;
 		mScratchFileName = cScratchFileName;
 		mScratchFileStream.open(mScratchFileName, std::ofstream::out | std::ofstream::trunc);
+        notify(UpdateEvent(0, 0, "")); // TODO
 		return true;
 	}
 	else

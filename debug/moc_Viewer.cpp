@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_Viewer_t {
-    QByteArrayData data[28];
-    char stringdata0[245];
+    QByteArrayData data[27];
+    char stringdata0[235];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -55,8 +55,7 @@ QT_MOC_LITERAL(22, 185, 15), // "OnMouseReleased"
 QT_MOC_LITERAL(23, 201, 12), // "OnKeyPressed"
 QT_MOC_LITERAL(24, 214, 3), // "key"
 QT_MOC_LITERAL(25, 218, 10), // "OnKeyTyped"
-QT_MOC_LITERAL(26, 229, 9), // "testToGui"
-QT_MOC_LITERAL(27, 239, 5) // "paint"
+QT_MOC_LITERAL(26, 229, 5) // "paint"
 
     },
     "Viewer\0OnLoadFile\0\0str\0OnSaveFile\0"
@@ -65,8 +64,7 @@ QT_MOC_LITERAL(27, 239, 5) // "paint"
     "size\0OnFontStyleChanged\0bold\0italic\0"
     "underlined\0OnMouseClicked\0x\0y\0"
     "OnMouseDragged\0OnMouseReleased\0"
-    "OnKeyPressed\0key\0OnKeyTyped\0testToGui\0"
-    "paint"
+    "OnKeyPressed\0key\0OnKeyTyped\0paint"
 };
 #undef QT_MOC_LITERAL
 
@@ -76,7 +74,7 @@ static const uint qt_meta_data_Viewer[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      16,   14, // methods
+      15,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -84,22 +82,21 @@ static const uint qt_meta_data_Viewer[] = {
        0,       // signalCount
 
  // methods: name, argc, parameters, tag, flags
-       1,    1,   94,    2, 0x02 /* Public */,
-       4,    1,   97,    2, 0x02 /* Public */,
-       6,    0,  100,    2, 0x02 /* Public */,
-       7,    0,  101,    2, 0x02 /* Public */,
-       8,    0,  102,    2, 0x02 /* Public */,
-       9,    1,  103,    2, 0x02 /* Public */,
-      10,    1,  106,    2, 0x02 /* Public */,
-      12,    1,  109,    2, 0x02 /* Public */,
-      14,    3,  112,    2, 0x02 /* Public */,
-      18,    2,  119,    2, 0x02 /* Public */,
-      21,    2,  124,    2, 0x02 /* Public */,
-      22,    0,  129,    2, 0x02 /* Public */,
-      23,    1,  130,    2, 0x02 /* Public */,
-      25,    1,  133,    2, 0x02 /* Public */,
-      26,    0,  136,    2, 0x02 /* Public */,
-      27,    0,  137,    2, 0x02 /* Public */,
+       1,    1,   89,    2, 0x02 /* Public */,
+       4,    1,   92,    2, 0x02 /* Public */,
+       6,    0,   95,    2, 0x02 /* Public */,
+       7,    0,   96,    2, 0x02 /* Public */,
+       8,    0,   97,    2, 0x02 /* Public */,
+       9,    1,   98,    2, 0x02 /* Public */,
+      10,    1,  101,    2, 0x02 /* Public */,
+      12,    1,  104,    2, 0x02 /* Public */,
+      14,    3,  107,    2, 0x02 /* Public */,
+      18,    2,  114,    2, 0x02 /* Public */,
+      21,    2,  119,    2, 0x02 /* Public */,
+      22,    0,  124,    2, 0x02 /* Public */,
+      23,    1,  125,    2, 0x02 /* Public */,
+      25,    1,  128,    2, 0x02 /* Public */,
+      26,    0,  131,    2, 0x02 /* Public */,
 
  // methods: parameters
     QMetaType::Bool, QMetaType::QString,    3,
@@ -116,7 +113,6 @@ static const uint qt_meta_data_Viewer[] = {
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,   24,
     QMetaType::Void, QMetaType::Int,   24,
-    QMetaType::QString,
     QMetaType::Void,
 
        0        // eod
@@ -144,9 +140,7 @@ void Viewer::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         case 11: _t->OnMouseReleased(); break;
         case 12: _t->OnKeyPressed((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 13: _t->OnKeyTyped((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 14: { QString _r = _t->testToGui();
-            if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = _r; }  break;
-        case 15: _t->paint(); break;
+        case 14: _t->paint(); break;
         default: ;
         }
     }
@@ -179,13 +173,13 @@ int Viewer::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 16)
+        if (_id < 15)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 16;
+        _id -= 15;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 16)
+        if (_id < 15)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 16;
+        _id -= 15;
     }
     return _id;
 }

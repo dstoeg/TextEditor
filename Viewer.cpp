@@ -1,31 +1,28 @@
 #include "Viewer.h"
 #include "Logger.h"
+#include "Parser.h"
 #include <iostream>
 #include <QVariant>
 #include <QDebug>
+#include <QFontMetrics>
 
 Viewer::Viewer(PieceListText * text, QObject * canvas) : QObject(0)
 {
     mText = text;
     mText->addListener(this);
     mCanvas = canvas;
+    mCaretVisible = false;
+    mFirstLine = nullptr;
+    mFirstTpos = 0;
+    mLastTpos = 0;
+    //Selection * mSel;
+    //Position * mLastPos;
 }
 
 void Viewer::update(UpdateEvent e)
 {
-
-}
-
-QString Viewer::testToGui()
-{
-    return QString("this is coming from model");
-}
-
-void Viewer::testFromGui()
-{
-    QVariant returnedValue;
-    QMetaObject::invokeMethod(mCanvas, "test", Q_RETURN_ARG(QVariant, returnedValue));
-    std::cout << returnedValue.toString().toStdString();
+    // TODO
+    QMetaObject::invokeMethod(mCanvas, "requestPaint");
 }
 
 void Viewer::OnKeyPressed(int key)
@@ -58,6 +55,8 @@ void Viewer::OnKeyTyped(int key)
 void Viewer::OnMouseClicked(int x, int y)
 {
     qDebug() << "clicked";
+    setCaret(x, y);
+
 }
 
 void Viewer::OnMouseDragged(int x, int y)
@@ -121,15 +120,17 @@ Line * Viewer::fill(size_t top, size_t bottom, size_t pos)
 
 void Viewer::paint()
 {
-    drawString("test", 20, 20, "30px Arial", 0);
 
-    drawString("test", 20, 50, "30px Verdana", 0);
+    Piece * piece = mText->getFirst();
+    size_t posY = 20;
 
-    drawString("test", 20, 80, "30px Impact", 0);
-
-    drawString("test", 20, 110, "30px Calibri", 0);
-
-    drawString("test", 20, 140, "30px Garamond", 0);
+    while (piece != nullptr)
+    {
+        std::string fontStr = Parser::getFontAsString(piece->getFont());
+        drawString(piece->getText(), 20, posY, fontStr);
+        posY += 30;
+        piece = piece->getNext();
+    }
 
     /*
     if (firstLine == nullptr) {
@@ -145,7 +146,7 @@ void Viewer::paint()
     if (sel != null) invertSelection(sel.beg, sel.end);*/
 }
 
-void Viewer::drawString(std::string const& s, size_t x, size_t y, std::string const& font, int style)
+void Viewer::drawString(std::string const& s, size_t x, size_t y, std::string const& font)
 {
     QString qs(s.c_str());
     QString qfont(font.c_str());
@@ -154,14 +155,13 @@ void Viewer::drawString(std::string const& s, size_t x, size_t y, std::string co
                               Q_ARG(QVariant, qs),
                               Q_ARG(QVariant, x),
                               Q_ARG(QVariant, y),
-                              Q_ARG(QVariant, qfont),
-                              Q_ARG(QVariant, style));
+                              Q_ARG(QVariant, qfont));
 }
 
 
 bool Viewer::OnSaveFile(QString file)
 {
-    return true;
+    return mText->save();
 }
 
 void Viewer::OnCut()
@@ -187,6 +187,7 @@ void Viewer::OnFind(QString str)
 void Viewer::OnFontChanged(QString font)
 {
     qDebug() << font;
+
 }
 
 void Viewer::OnFontSizeChanged(int size)
@@ -199,4 +200,44 @@ void Viewer::OnFontStyleChanged(bool bold, bool italic, bool underlined)
     qDebug() << "bold " << bold;
     qDebug() << "italic " << italic;
     qDebug() << "underlined " << underlined;
+}
+
+
+
+void Viewer::invertCaret() {
+    QMetaObject::invokeMethod(mCanvas, "invertCaret",
+                              Q_ARG(QVariant, mCaret.x),
+                              Q_ARG(QVariant, mCaret.y));
+    update(UpdateEvent(0,0,""));
+}
+
+void Viewer::setCaret(Position pos) {
+    removeCaret();
+    // removeSelection(); TODO
+    mCaret = pos;
+    mCaretVisible = true;
+    invertCaret();
+}
+
+void Viewer::setCaret(size_t tpos) {
+    // TODO
+}
+
+void Viewer::setCaret(size_t x, size_t y) {
+    setCaret(Pos(x, y));
+}
+
+void Viewer::removeCaret() {
+    if (mCaretVisible)
+        invertCaret();
+    mCaretVisible = false;
+}
+
+Position Viewer::Pos(size_t x, size_t y)
+{
+    // TODO
+    Position pos;
+    pos.x = x;
+    pos.y = y;
+    return pos;
 }
