@@ -2,6 +2,7 @@
 #include "Logger.h"
 
 #include <iostream>
+#include <sstream>
 
 void Logger::dumpText(PieceListText & text)
 {
@@ -35,4 +36,17 @@ void Logger::dumpTextList(PieceListText & text)
 	
 	std::cout << "Total Size: " << text.getLength() << std::endl;
 
+}
+
+std::string Logger::getText(PieceListText & text)
+{
+    Piece * piece = text.getFirst();
+    std::stringstream s;
+
+    while (piece != nullptr)
+    {
+        s << piece->getText();
+        piece = piece->getNext();
+    }
+    return s.str();
 }

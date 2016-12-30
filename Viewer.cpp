@@ -1,4 +1,5 @@
 #include "Viewer.h"
+#include "Logger.h"
 #include <iostream>
 #include <QVariant>
 #include <QDebug>
@@ -67,4 +68,86 @@ void Viewer::OnMouseDragged(int x, int y)
 void Viewer::OnMouseReleased()
 {
     qDebug() << "released";
+}
+
+bool Viewer::OnLoadFile(QString str)
+{
+    return mText->load(str.toStdString());
+}
+
+Line * Viewer::fill(size_t top, size_t bottom, size_t pos)
+{
+    //g = getGraphics();
+    //FontMetrics m = g.getFontMetrics();
+    /*
+    Line * first = nullptr;
+    Line * line = nullptr;
+    size_t y = top;
+    mLastTpos = pos;
+    char ch = text.charAt(pos);
+
+    while (y < bottom) {
+        if (first == nullptr) {
+            first = new Line();
+            line = first;
+        } else {
+            Line * prev = line;
+            line->next = new Line();
+            line = line->next;
+            line->prev = prev;
+        }
+        StringBuffer buf = new StringBuffer();
+        while (ch != '\n' && ch != EOF) {
+            buf.append(ch);
+            pos++;
+            ch = text.charAt(pos);
+        }
+        boolean eol = ch == '\n';
+        if (eol) { buf.append(ch); pos++; ch = text.charAt(pos); }
+        line.len = buf.length();
+        line.text = buf.toString();
+        line.x = LEFT;
+        line.y = y;
+        line.w = stringWidth(m, line.text);
+        line.h = m.getHeight();
+        line.base = y + m.getAscent();
+        y += line.h;
+        lastTpos += line.len;
+        if (!eol) break;
+    }
+    return first;*/
+    return 0;
+}
+
+void Viewer::paint()
+{
+    drawString("test", 20, 20, "20px sans-serif", 0);
+
+    drawString("anotherTest", 20, 100, "50px monospace", 0);
+
+    /*
+    if (firstLine == nullptr) {
+        firstLine = fill(TOP, getHeight() - BOTTOM, 0);
+        caret = Pos(0);
+    }
+    Line * line = firstLine;
+    while (line != nullptr) {
+        drawString(g, line.text, line.x, line.base);
+        line = line.next;
+    }
+    if (caret != null) invertCaret();
+    if (sel != null) invertSelection(sel.beg, sel.end);*/
+}
+
+void Viewer::drawString(std::string const& s, size_t x, size_t y, std::string const& font, int style)
+{
+    QString qs(s.c_str());
+    QString qfont(font.c_str());
+
+    QMetaObject::invokeMethod(mCanvas, "drawString",
+                              Q_ARG(QVariant, qs),
+                              Q_ARG(QVariant, x),
+                              Q_ARG(QVariant, y),
+                              Q_ARG(QVariant, qfont),
+                              Q_ARG(QVariant, style));
 }

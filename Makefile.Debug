@@ -63,7 +63,8 @@ OBJECTS       = debug\main.obj \
 		debug\qrc_qml.obj \
 		debug\moc_Viewer.obj
 
-DIST          =  Helpers.h \
+DIST          = EditorToolBar.qml \
+		EditorMenubar.qml Helpers.h \
 		Logger.h \
 		Parser.h \
 		Piece.h \
@@ -171,6 +172,9 @@ compiler_rcc_clean:
 	-$(DEL_FILE) debug\qrc_qml.cpp
 debug\qrc_qml.cpp: qml.qrc \
 		D:\Qt\5.7\msvc2015_64\bin\rcc.exe \
+		EditorMenubar.qml \
+		EditorCanvas.qml \
+		EditorToolbar.qml \
 		main.qml
 	D:\Qt\5.7\msvc2015_64\bin\rcc.exe -name qml qml.qrc -o debug\qrc_qml.cpp
 
@@ -180,6 +184,9 @@ compiler_moc_header_clean:
 debug\moc_Viewer.cpp: PieceListText.h \
 		Piece.h \
 		UpdateEvent.h \
+		Selection.h \
+		Position.h \
+		Line.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\QObject \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qobject.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qobjectdefs.h \
@@ -371,6 +378,9 @@ debug\main.obj: main.cpp D:\Qt\5.7\msvc2015_64\include\QtGui\QGuiApplication \
 		Piece.h \
 		UpdateEvent.h \
 		Viewer.h \
+		Selection.h \
+		Position.h \
+		Line.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\QObject \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\QString \
 		D:\Qt\5.7\msvc2015_64\include\QtGui\QKeyEvent \
@@ -409,6 +419,9 @@ debug\Viewer.obj: Viewer.cpp Viewer.h \
 		PieceListText.h \
 		Piece.h \
 		UpdateEvent.h \
+		Selection.h \
+		Position.h \
+		Line.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\QObject \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qobject.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qobjectdefs.h \
@@ -488,6 +501,7 @@ debug\Viewer.obj: Viewer.cpp Viewer.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qfiledevice.h \
 		D:\Qt\5.7\msvc2015_64\include\QtGui\qvector2d.h \
 		D:\Qt\5.7\msvc2015_64\include\QtGui\qtouchdevice.h \
+		Logger.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\QVariant \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\QDebug
 

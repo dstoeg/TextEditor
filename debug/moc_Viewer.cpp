@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_Viewer_t {
-    QByteArrayData data[11];
-    char stringdata0[96];
+    QByteArrayData data[14];
+    char stringdata0[117];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -30,21 +30,25 @@ struct qt_meta_stringdata_Viewer_t {
 static const qt_meta_stringdata_Viewer_t qt_meta_stringdata_Viewer = {
     {
 QT_MOC_LITERAL(0, 0, 6), // "Viewer"
-QT_MOC_LITERAL(1, 7, 14), // "OnMouseClicked"
-QT_MOC_LITERAL(2, 22, 0), // ""
-QT_MOC_LITERAL(3, 23, 1), // "x"
-QT_MOC_LITERAL(4, 25, 1), // "y"
-QT_MOC_LITERAL(5, 27, 14), // "OnMouseDragged"
-QT_MOC_LITERAL(6, 42, 15), // "OnMouseReleased"
-QT_MOC_LITERAL(7, 58, 12), // "OnKeyPressed"
-QT_MOC_LITERAL(8, 71, 3), // "key"
-QT_MOC_LITERAL(9, 75, 10), // "OnKeyTyped"
-QT_MOC_LITERAL(10, 86, 9) // "testToGui"
+QT_MOC_LITERAL(1, 7, 10), // "OnLoadFile"
+QT_MOC_LITERAL(2, 18, 0), // ""
+QT_MOC_LITERAL(3, 19, 3), // "str"
+QT_MOC_LITERAL(4, 23, 14), // "OnMouseClicked"
+QT_MOC_LITERAL(5, 38, 1), // "x"
+QT_MOC_LITERAL(6, 40, 1), // "y"
+QT_MOC_LITERAL(7, 42, 14), // "OnMouseDragged"
+QT_MOC_LITERAL(8, 57, 15), // "OnMouseReleased"
+QT_MOC_LITERAL(9, 73, 12), // "OnKeyPressed"
+QT_MOC_LITERAL(10, 86, 3), // "key"
+QT_MOC_LITERAL(11, 90, 10), // "OnKeyTyped"
+QT_MOC_LITERAL(12, 101, 9), // "testToGui"
+QT_MOC_LITERAL(13, 111, 5) // "paint"
 
     },
-    "Viewer\0OnMouseClicked\0\0x\0y\0OnMouseDragged\0"
-    "OnMouseReleased\0OnKeyPressed\0key\0"
-    "OnKeyTyped\0testToGui"
+    "Viewer\0OnLoadFile\0\0str\0OnMouseClicked\0"
+    "x\0y\0OnMouseDragged\0OnMouseReleased\0"
+    "OnKeyPressed\0key\0OnKeyTyped\0testToGui\0"
+    "paint"
 };
 #undef QT_MOC_LITERAL
 
@@ -54,7 +58,7 @@ static const uint qt_meta_data_Viewer[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       6,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -62,20 +66,24 @@ static const uint qt_meta_data_Viewer[] = {
        0,       // signalCount
 
  // methods: name, argc, parameters, tag, flags
-       1,    2,   44,    2, 0x02 /* Public */,
-       5,    2,   49,    2, 0x02 /* Public */,
-       6,    0,   54,    2, 0x02 /* Public */,
-       7,    1,   55,    2, 0x02 /* Public */,
-       9,    1,   58,    2, 0x02 /* Public */,
-      10,    0,   61,    2, 0x02 /* Public */,
+       1,    1,   54,    2, 0x02 /* Public */,
+       4,    2,   57,    2, 0x02 /* Public */,
+       7,    2,   62,    2, 0x02 /* Public */,
+       8,    0,   67,    2, 0x02 /* Public */,
+       9,    1,   68,    2, 0x02 /* Public */,
+      11,    1,   71,    2, 0x02 /* Public */,
+      12,    0,   74,    2, 0x02 /* Public */,
+      13,    0,   75,    2, 0x02 /* Public */,
 
  // methods: parameters
-    QMetaType::Void, QMetaType::Int, QMetaType::Int,    3,    4,
-    QMetaType::Void, QMetaType::Int, QMetaType::Int,    3,    4,
+    QMetaType::Bool, QMetaType::QString,    3,
+    QMetaType::Void, QMetaType::Int, QMetaType::Int,    5,    6,
+    QMetaType::Void, QMetaType::Int, QMetaType::Int,    5,    6,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Int,    8,
-    QMetaType::Void, QMetaType::Int,    8,
+    QMetaType::Void, QMetaType::Int,   10,
+    QMetaType::Void, QMetaType::Int,   10,
     QMetaType::QString,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -86,13 +94,16 @@ void Viewer::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         Viewer *_t = static_cast<Viewer *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->OnMouseClicked((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 1: _t->OnMouseDragged((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 2: _t->OnMouseReleased(); break;
-        case 3: _t->OnKeyPressed((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 4: _t->OnKeyTyped((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 5: { QString _r = _t->testToGui();
+        case 0: { bool _r = _t->OnLoadFile((*reinterpret_cast< QString(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+        case 1: _t->OnMouseClicked((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 2: _t->OnMouseDragged((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 3: _t->OnMouseReleased(); break;
+        case 4: _t->OnKeyPressed((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 5: _t->OnKeyTyped((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 6: { QString _r = _t->testToGui();
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = _r; }  break;
+        case 7: _t->paint(); break;
         default: ;
         }
     }
@@ -125,13 +136,13 @@ int Viewer::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 6)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 6;
+        _id -= 8;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 6)
+        if (_id < 8)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 6;
+        _id -= 8;
     }
     return _id;
 }

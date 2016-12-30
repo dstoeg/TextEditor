@@ -47,3 +47,7 @@ HEADERS += \
     Line.h \
     Position.h \
     Selection.h
+
+DISTFILES += \
+    EditorToolBar.qml \
+    EditorMenubar.qml
