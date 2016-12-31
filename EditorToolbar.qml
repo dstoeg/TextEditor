@@ -29,7 +29,7 @@ ToolBar {
             }
 
             ComboBox {
-                currentIndex: 0
+                currentIndex: 1
                 Layout.preferredWidth: 80
 
                 model: ListModel {

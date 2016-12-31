@@ -39,7 +39,6 @@ Canvas {
     function drawString(text, x, y, font)
     {
         var ctx = getContext("2d");
-        //ctx.reset();
         ctx.font = font;
         ctx.fillText(qsTr(text), x, y);
     }

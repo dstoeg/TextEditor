@@ -23,6 +23,7 @@ int main(int argc, char *argv[])
     QObject * canvas = root->findChild<QObject*>("canvas");
 
     PieceListText text;
+    text.load("C:/Users/dstoeg/JKU/SystemSoftware/editor/test.txt");
     Viewer viewer(&text,canvas);
 
     engine.rootContext()->setContextProperty("viewer", &viewer);

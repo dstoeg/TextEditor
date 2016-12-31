@@ -110,7 +110,6 @@ private:
     //--------------------------------------------------------------------------
     // constants
     //--------------------------------------------------------------------------
-
     const size_t        TOP = 5;    // top margin
     const size_t        BOTTOM = 5; // bottom margin
     const size_t        LEFT = 5;   // left margin

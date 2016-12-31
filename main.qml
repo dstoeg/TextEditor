@@ -8,8 +8,12 @@ import QtQuick.Controls.Styles 1.2
 ApplicationWindow {
     title: qsTr("Text Editor")
     width: 1000
-    height: 1000
+    height: 1200
     visible: true
+    minimumWidth: 1000;
+    maximumWidth: 1000;
+    minimumHeight: 1200;
+    maximumHeight: 1200;
 
     menuBar : EditorMenubar { }
 
