@@ -8,10 +8,13 @@
 #include "PieceListText.h"
 #include "Viewer.h"
 
+#include <iostream>
+
 using namespace std;
 
 int main(int argc, char *argv[])
 {
+
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
     QQmlComponent component(&engine, "qrc:/main.qml");

@@ -1,10 +1,13 @@
 #include "Viewer.h"
 #include "Logger.h"
 #include "Parser.h"
+#include "Helpers.h"
 #include <iostream>
+#include <sstream>
 #include <QVariant>
 #include <QDebug>
 #include <QFontMetrics>
+#include <QQmlProperty>
 
 Viewer::Viewer(PieceListText * text, QObject * canvas) : QObject(0)
 {
@@ -15,8 +18,8 @@ Viewer::Viewer(PieceListText * text, QObject * canvas) : QObject(0)
     mFirstLine = nullptr;
     mFirstTpos = 0;
     mLastTpos = 0;
-    //Selection * mSel;
-    //Position * mLastPos;
+    mSel = nullptr;
+    mLastPos = nullptr;
 }
 
 void Viewer::update(UpdateEvent e)
@@ -76,14 +79,14 @@ bool Viewer::OnLoadFile(QString str)
 
 Line * Viewer::fill(size_t top, size_t bottom, size_t pos)
 {
-    //g = getGraphics();
-    //FontMetrics m = g.getFontMetrics();
-    /*
+    // TODO adapt to different font sizes
+    QFontMetrics m(mCurrentFont);
+
     Line * first = nullptr;
     Line * line = nullptr;
     size_t y = top;
     mLastTpos = pos;
-    char ch = text.charAt(pos);
+    char ch = mText->charAt(pos);
 
     while (y < bottom) {
         if (first == nullptr) {
@@ -95,28 +98,37 @@ Line * Viewer::fill(size_t top, size_t bottom, size_t pos)
             line = line->next;
             line->prev = prev;
         }
-        StringBuffer buf = new StringBuffer();
+
+        std::stringstream buf;
         while (ch != '\n' && ch != EOF) {
-            buf.append(ch);
+            buf << ch;
             pos++;
-            ch = text.charAt(pos);
+            ch = mText->charAt(pos);
         }
-        boolean eol = ch == '\n';
-        if (eol) { buf.append(ch); pos++; ch = text.charAt(pos); }
-        line.len = buf.length();
-        line.text = buf.toString();
-        line.x = LEFT;
-        line.y = y;
-        line.w = stringWidth(m, line.text);
-        line.h = m.getHeight();
-        line.base = y + m.getAscent();
-        y += line.h;
-        lastTpos += line.len;
+
+        bool eol = (ch == '\n');
+        if (eol)
+        {
+            buf << ch;
+            pos++;
+            ch = mText->charAt(pos);
+        }
+
+        std::string str = buf.str();
+        line->len = str.size();
+        line->text = str;
+        line->x = LEFT;
+        line->y = y;
+        line->w = stringWidth(m, line->text);
+        line->h = m.height();
+        line->base = y + m.ascent();
+        y += line->h;
+        mLastTpos += line->len;
         if (!eol) break;
     }
-    return first;*/
-    return 0;
+    return first;
 }
+
 
 void Viewer::paint()
 {
@@ -126,30 +138,33 @@ void Viewer::paint()
 
     while (piece != nullptr)
     {
-        std::string fontStr = Parser::getFontAsString(piece->getFont());
-        drawString(piece->getText(), 20, posY, fontStr);
+        drawString(piece->getText(), 20, posY, piece->getFont());
         posY += 30;
         piece = piece->getNext();
     }
-
     /*
-    if (firstLine == nullptr) {
-        firstLine = fill(TOP, getHeight() - BOTTOM, 0);
-        caret = Pos(0);
+
+    if (mFirstLine == nullptr) {
+        mFirstLine = fill(TOP, getHeight() - BOTTOM, 0);
+        mCaret = Pos(0);
     }
-    Line * line = firstLine;
+    Line * line = mFirstLine;
     while (line != nullptr) {
-        drawString(g, line.text, line.x, line.base);
-        line = line.next;
+        drawString(line->text, line->x, line->base, mCurrentFont);
+        line = line->next;
     }
-    if (caret != null) invertCaret();
-    if (sel != null) invertSelection(sel.beg, sel.end);*/
+    if (mCaretVisible)
+        invertCaret();
+
+    if (mSel != nullptr)
+        invertSelection(mSel->beg, mSel->end);
+        */
 }
 
-void Viewer::drawString(std::string const& s, size_t x, size_t y, std::string const& font)
+void Viewer::drawString(std::string const& s, size_t x, size_t y, QFont const& font)
 {
-    QString qs(s.c_str());
-    QString qfont(font.c_str());
+    QString qs(Helpers::ReplaceTabs(s).c_str());
+    QString qfont(Parser::getFontAsString(font).c_str());
 
     QMetaObject::invokeMethod(mCanvas, "drawString",
                               Q_ARG(QVariant, qs),
@@ -186,22 +201,20 @@ void Viewer::OnFind(QString str)
 
 void Viewer::OnFontChanged(QString font)
 {
-    qDebug() << font;
-
+    mCurrentFont.setFamily(font);
 }
 
 void Viewer::OnFontSizeChanged(int size)
 {
-    qDebug() << size;
+    mCurrentFont.setPixelSize(size);
 }
 
 void Viewer::OnFontStyleChanged(bool bold, bool italic, bool underlined)
 {
-    qDebug() << "bold " << bold;
-    qDebug() << "italic " << italic;
-    qDebug() << "underlined " << underlined;
+    mCurrentFont.setBold(bold);
+    mCurrentFont.setItalic(italic);
+    mCurrentFont.setUnderline(underlined);
 }
-
 
 
 void Viewer::invertCaret() {
@@ -241,3 +254,67 @@ Position Viewer::Pos(size_t x, size_t y)
     pos.y = y;
     return pos;
 }
+
+size_t Viewer::stringWidth(QFontMetrics m, std::string const& s)
+{
+    std::string s1 = Helpers::ReplaceTabs(s);
+    return m.width(QString::fromStdString(s1));
+}
+
+size_t Viewer::charWidth(QFontMetrics m, char ch)
+{
+    if (ch == '\t')
+        return 4 * m.width(' ');
+    else
+        return m.width(ch);
+}
+
+void Viewer::rebuildFrom(Position pos)
+{
+    Line * line = pos.line;
+    Line * prev = line->prev;
+    line = fill(line->y, getHeight() - BOTTOM, pos.org);
+    if (prev == nullptr)
+        mFirstLine = line;
+    else {
+        prev->next = line;
+        line->prev = prev;
+    }
+    repaint(LEFT, line->y, getWidth(), getHeight());
+}
+
+size_t Viewer::getHeight()
+{
+    return QQmlProperty::read(mCanvas, "height").toInt();
+}
+
+size_t Viewer::getWidth()
+{
+    return QQmlProperty::read(mCanvas, "width").toInt();
+}
+
+void Viewer::repaint(size_t x, size_t y, size_t width, size_t height)
+{
+    // TODO
+}
+
+Position Viewer::Pos(size_t tpos)
+{
+    return Position();
+}
+
+void Viewer::invertSelection(Position beg, Position end)
+{
+
+}
+
+void Viewer::setSelection(size_t from, size_t to)
+{
+
+}
+
+void Viewer::removeSelection()
+{
+
+}
+
