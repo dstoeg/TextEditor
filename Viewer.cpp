@@ -18,8 +18,7 @@ Viewer::Viewer(PieceListText * text, QObject * canvas) : QObject(0)
     mFirstLine = nullptr;
     mFirstTpos = 0;
     mLastTpos = 0;
-    mSel = nullptr;
-    mLastPos = nullptr;
+    mLastPos.valid = false;
 
     // default font Calibri 20px
     mCurrentFont.setFamily("Calibri");
@@ -97,6 +96,7 @@ size_t Viewer::getWidth()
 void Viewer::repaint(size_t x, size_t y, size_t width, size_t height)
 {
     // TODO
+    QMetaObject::invokeMethod(mCanvas, "requestPaint");
 }
 
 //--------------------------------------------------------------------------
@@ -199,6 +199,7 @@ void Viewer::invertCaret() {
     QMetaObject::invokeMethod(mCanvas, "invertCaret",
                               Q_ARG(QVariant, mCaret.x),
                               Q_ARG(QVariant, mCaret.y));
+    repaint(0,0,0,0);
 }
 
 void Viewer::setCaret(Position pos) {
@@ -254,23 +255,22 @@ void Viewer::invertSelection(Position beg, Position end)
 
 void Viewer::setSelection(size_t from, size_t to)
 {
-    /*
     if (from < to) {
         removeCaret();
         Position beg = Pos(from);
         Position end = Pos(to);
-        sel = new Selection(beg, end);
+        mSel = Selection(beg, end);
         invertSelection(beg, end);
-    } else sel = null;
-    */
+    }
+    else
+        mSel.valid = false;
 }
 
 void Viewer::removeSelection()
 {
-    /*
-    if (sel != null) invertSelection(sel.beg, sel.end);
-    sel = null;
-    */
+    if (mSel.valid)
+        invertSelection(mSel.beg, mSel.end);
+    mSel.valid = false;
 }
 
 //--------------------------------------------------------------------------
@@ -309,7 +309,12 @@ void Viewer::OnKeyTyped(int key)
 
 void Viewer::OnMouseClicked(int x, int y)
 {
-    setCaret(x, y);
+    removeCaret();
+    removeSelection();
+    Position pos = Pos(x, y);
+    mSel = Selection(pos, pos);
+    mLastPos = pos;
+    mLastPos.valid = true;
 }
 
 void Viewer::OnMouseDragged(int x, int y)
@@ -319,7 +324,9 @@ void Viewer::OnMouseDragged(int x, int y)
 
 void Viewer::OnMouseReleased()
 {
-
+    if (mSel.beg.tpos == mSel.end.tpos)
+        setCaret(mSel.beg);
+    mLastPos.valid = false;
 }
 
 //--------------------------------------------------------------------------
@@ -469,26 +476,10 @@ void Viewer::update(UpdateEvent e)
         }
         setCaret(e.from);
     }
-
-    // TODO
-    //QMetaObject::invokeMethod(mCanvas, "requestPaint");
 }
 
 void Viewer::paint()
 {
-/*
-    Piece * piece = mText->getFirst();
-    size_t posY = 20;
-
-    while (piece != nullptr)
-    {
-        drawString(piece->getText(), 20, posY, piece->getFont());
-        posY += 30;
-        piece = piece->getNext();
-    }
-    */
-
-
     if (mFirstLine == nullptr) {
         mFirstLine = fill(TOP, getHeight() - BOTTOM, 0);
         mCaret = Pos(0);
@@ -502,8 +493,8 @@ void Viewer::paint()
     if (mCaretVisible)
         invertCaret();
 
-    if (mSel != nullptr)
-        invertSelection(mSel->beg, mSel->end);
+    if (mSel.valid)
+        invertSelection(mSel.beg, mSel.end);
 
 }
 

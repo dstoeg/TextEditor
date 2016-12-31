@@ -129,7 +129,6 @@ bool PieceListText::load(std::string const& file)
 		mLength = length;
 		mScratchFileName = cScratchFileName;
 		mScratchFileStream.open(mScratchFileName, std::ofstream::out | std::ofstream::trunc);
-        notify(UpdateEvent(0, 0, "")); // TODO
 		return true;
 	}
 	else

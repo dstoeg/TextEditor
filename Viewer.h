@@ -102,10 +102,10 @@ private:
     Line * mFirstLine;       // the lines in this viewer
     size_t mFirstTpos;       // first text position in this viewer
     size_t mLastTpos;        // last text position in this viewer
-    Selection * mSel;
+    Selection mSel;
     Position mCaret;
     bool mCaretVisible;
-    Position * mLastPos;     // last mouse position: used during mouse dragging
+    Position mLastPos;     // last mouse position: used during mouse dragging
 
     //--------------------------------------------------------------------------
     // constants

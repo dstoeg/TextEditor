@@ -8,7 +8,9 @@ class Selection
 public:
     Position beg;
     Position end;
-    Selection (Position a, Position b) { beg = a; end = b; }
+    bool valid;
+    Selection (Position a, Position b) { beg = a; end = b; valid = true;}
+    Selection () { valid = false;}
 };
 
 #endif // SELECTION_H

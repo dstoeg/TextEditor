@@ -12,8 +12,8 @@ ApplicationWindow {
     visible: true
     minimumWidth: 1000;
     maximumWidth: 1000;
-    minimumHeight: 1200;
-    maximumHeight: 1200;
+    //minimumHeight: 1200;
+    //maximumHeight: 1200;
 
     menuBar : EditorMenubar { }
 
