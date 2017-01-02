@@ -53,6 +53,12 @@ void PieceListText::insert(size_t pos, char c)
     notify(UpdateEvent(pos, pos, std::to_string(c)));
 }
 
+void PieceListText::insert(size_t pos, std::string const& str)
+{
+    for (size_t i=0; i<str.size(); i++)
+        insert(pos++, str[i]);
+}
+
 Piece * PieceListText::split(size_t pos)
 {
 	if (pos == 0) return mFirstPiece;

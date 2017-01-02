@@ -111,9 +111,9 @@ private:
     //--------------------------------------------------------------------------
     // constants
     //--------------------------------------------------------------------------
-    const size_t        TOP = 5;    // top margin
-    const size_t        BOTTOM = 5; // bottom margin
-    const size_t        LEFT = 5;   // left margin
+    const size_t        TOP = 10;    // top margin
+    const size_t        BOTTOM = 10; // bottom margin
+    const size_t        LEFT = 10;   // left margin
     const char          EOF_ = '\0';
     const std::string   CRLF = "\r\n";
 };

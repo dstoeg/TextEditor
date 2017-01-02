@@ -14,6 +14,7 @@ public:
 
     // basic
     void insert(size_t pos, char c);
+    void insert(size_t pos, std::string const& str);
     Piece * split(size_t pos);
     void delete_(size_t from, size_t to);
     char charAt(size_t pos);

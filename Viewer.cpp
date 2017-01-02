@@ -22,7 +22,7 @@ Viewer::Viewer(PieceListText * text, QObject * canvas) : QObject(0)
 
     // default font Calibri 20px
     mCurrentFont.setFamily("Calibri");
-    mCurrentFont.setPixelSize(20);
+    mCurrentFont.setPixelSize(30);
     mCurrentFont.setBold(false);
     mCurrentFont.setItalic(false);
     mCurrentFont.setUnderline(false);
@@ -287,34 +287,66 @@ void Viewer::removeSelection()
 
 void Viewer::OnKeyPressed(int key)
 {
-    if (key == Qt::Key_Up)
-        std::cout << "up pressed";
-    else if (key == Qt::Key_Down)
-        std::cout << "down pressed";
-    else if (key == Qt::Key_Left)
-        std::cout << "left pressed";
-    else if (key == Qt::Key_Right)
-        std::cout << "right pressed";
-
-    return;
+    if (mCaret.valid) {
+        int pos = mCaret.tpos;
+        char ch;
+        if (key == Qt::Key_Right) {
+            pos++;
+            ch = mText->charAt(pos);
+            if (ch == '\n')
+                pos++;
+            setCaret(pos);
+        }
+        else if (key == Qt::Key_Left) {
+            pos--;
+            ch = mText->charAt(pos);
+            if (ch == '\n')
+                pos--;
+            setCaret(pos);
+        }
+        else if (key == Qt::Key_Up) {
+            setCaret(mCaret.x, mCaret.y - mCaret.line->h);
+        }
+        else if (key == Qt::Key_Down) {
+            setCaret(mCaret.x, mCaret.y + mCaret.line->h);
+        }
+        else if (key == Qt::Key_F1) {
+            // nothing
+        }
+    }
 }
 
 void Viewer::OnKeyTyped(int key)
 {
-    if (key == Qt::Key_Backspace)
-        std::cout << "backspace pressed";
-    else if (key == Qt::Key_Escape)
-        std::cout << "backspace pressed";
-    else if (key == Qt::Key_Enter)
-        std::cout << "enter pressed";
-    else
-        std::cout << char(key) << " pressed";
+    bool selection = mSel.valid;
+
+    if (selection) {
+        mText->delete_(mSel.beg.tpos, mSel.end.tpos);
+        // selection is removed; caret is set at sel.beg.tpos
+    }
+    if (mCaret.valid) {
+        if (key == Qt::Key_Backspace) {
+            if (mCaret.tpos > 0 && !selection) {
+                int d = mCaret.off == 0 ? 2 : 1;
+                mText->delete_(mCaret.tpos - d, mCaret.tpos);
+            }
+        }
+        else if (key == Qt::Key_Escape) {
+            // nothing
+        }
+        else if (key == Qt::Key_Enter) {
+            mText->insert(mCaret.tpos, CRLF);
+        }
+        else {
+            mText->insert(mCaret.tpos, char(key));
+        }
+        //scrollBar.setValues(firstTpos, 0, 0, text.length()); TODO
+    }
 }
 
 //--------------------------------------------------------------------------
 // mouse handling
 //--------------------------------------------------------------------------
-bool invert = false;
 
 void Viewer::OnMouseClicked(int x, int y)
 {
@@ -403,8 +435,6 @@ Line * Viewer::fill(size_t top, size_t bottom, size_t pos)
 {
     // TODO adapt to different font sizes
     QFontMetrics m(mCurrentFont);
-
-    Logger::dumpTextList(*mText);
 
     Line * first = nullptr;
     Line * line = nullptr;
