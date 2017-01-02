@@ -10,10 +10,11 @@ Canvas {
     objectName: "canvas"
     anchors.fill: parent
     antialiasing: false
+    renderStrategy: Canvas.Immediate
 
     MouseArea {
         anchors.fill: parent
-        onClicked: {
+        onPressed: {
             viewer.OnMouseClicked(mouseX, mouseY);
             mouse.accepted = true;
         }
@@ -46,13 +47,10 @@ Canvas {
         ctx.stroke();
     }
 
-    property bool caret: false;
-
-    function invertCaret(caretX, caretY)
+    function invertCaret(caretX, caretY, color)
     {
-        caret = !caret;
         var ctx = getContext("2d");
-        ctx.strokeStyle = caret ? "black" : "white";
+        ctx.strokeStyle = color;
 
         var x = caretX;
         var y = caretY;
@@ -85,5 +83,6 @@ Canvas {
 
     onPaint: {
         viewer.paint();
+        console.log("paint called")
     }
 }

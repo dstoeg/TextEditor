@@ -73,7 +73,7 @@ private:
     //--------------------------------------------------------------------------
     // caret handling
     //--------------------------------------------------------------------------
-    void invertCaret();
+    void invertCaret(QString color);
     void setCaret(Position pos);
     void setCaret(size_t tpos);
     void setCaret(size_t x, size_t y);
@@ -105,7 +105,6 @@ private:
     size_t mLastTpos;        // last text position in this viewer
     Selection mSel;
     Position mCaret;
-    bool mCaretVisible;
     Position mLastPos;     // last mouse position: used during mouse dragging
 
     //--------------------------------------------------------------------------

@@ -12,7 +12,7 @@ public:
     size_t y;
     size_t w;           // width
     size_t h;           // height
-    int base;           // base line
+    size_t base;        // base line
     Line * prev;
     Line * next;
 };

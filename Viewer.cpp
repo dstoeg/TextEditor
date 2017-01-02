@@ -14,7 +14,7 @@ Viewer::Viewer(PieceListText * text, QObject * canvas) : QObject(0)
     mText = text;
     mText->addListener(this);
     mCanvas = canvas;
-    mCaretVisible = false;
+    mCaret.valid = false;
     mFirstLine = nullptr;
     mFirstTpos = 0;
     mLastTpos = 0;
@@ -193,7 +193,7 @@ Position Viewer::Pos(size_t tpos)
         pos.line = line;
         pos.off = tpos - pos.org;
         QFontMetrics m(mCurrentFont);
-        int i = pos.org;
+        size_t i = pos.org;
         while (i < tpos) {
             char ch = mText->charAt(i); i++;
             pos.x += charWidth(m, ch);
@@ -207,25 +207,26 @@ Position Viewer::Pos(size_t tpos)
 // caret handling
 //--------------------------------------------------------------------------
 
-void Viewer::invertCaret() {
+void Viewer::invertCaret(QString color) {
     QMetaObject::invokeMethod(mCanvas, "invertCaret",
                               Q_ARG(QVariant, mCaret.x),
-                              Q_ARG(QVariant, mCaret.y));
+                              Q_ARG(QVariant, mCaret.y),
+                              Q_ARG(QVariant, color));
 }
 
 void Viewer::setCaret(Position pos) {
     removeCaret();
     removeSelection();
     mCaret = pos;
-    mCaretVisible = true;
-    invertCaret();
+    mCaret.valid = true;
+    invertCaret("black");
 }
 
 void Viewer::setCaret(size_t tpos) {
     if (tpos >= mFirstTpos && tpos <= mLastTpos)
         setCaret(Pos(tpos));
     else
-        mCaretVisible = false;
+        mCaret.valid = false;
 }
 
 void Viewer::setCaret(size_t x, size_t y) {
@@ -233,9 +234,9 @@ void Viewer::setCaret(size_t x, size_t y) {
 }
 
 void Viewer::removeCaret() {
-    if (mCaretVisible)
-        invertCaret();
-    mCaretVisible = false;
+    if (mCaret.valid)
+        invertCaret("white");
+    mCaret.valid = false;
 }
 
 
@@ -246,10 +247,10 @@ void Viewer::removeCaret() {
 void Viewer::invertSelection(Position beg, Position end)
 {
     Line * line = beg.line;
-    int x = beg.x;
-    int y = line->y;
-    int w;
-    int h = line->h;
+    size_t x = beg.x;
+    size_t y = line->y;
+    size_t w;
+    size_t h = line->h;
     while (line != end.line) {
         w = line->w + LEFT - x;
         invertSelectionOnCanvas(x, y, w, h);
@@ -282,13 +283,13 @@ void Viewer::removeSelection()
 }
 
 //--------------------------------------------------------------------------
-// Keyboard handling TODO
+// Keyboard handling
 //--------------------------------------------------------------------------
 
 void Viewer::OnKeyPressed(int key)
 {
     if (mCaret.valid) {
-        int pos = mCaret.tpos;
+        size_t pos = mCaret.tpos;
         char ch;
         if (key == Qt::Key_Right) {
             pos++;
@@ -356,7 +357,7 @@ void Viewer::OnMouseClicked(int x, int y)
     mSel = Selection(pos, pos);
     mLastPos = pos;
     mLastPos.valid = true;
-    paint();
+
 }
 
 void Viewer::OnMouseDragged(int x, int y)
@@ -394,6 +395,8 @@ void Viewer::OnMouseReleased()
     if (mSel.beg.tpos == mSel.end.tpos)
         setCaret(mSel.beg);
     mLastPos.valid = false;
+    QMetaObject::invokeMethod(mCanvas, "requestPaint");
+
 }
 
 //--------------------------------------------------------------------------
@@ -509,7 +512,7 @@ void Viewer::update(UpdateEvent e)
 
     if (e.from == e.to) { // insert
         if (e.from != mCaret.tpos) pos = Pos(e.from);
-        int newCarPos = pos.tpos + e.text.length();
+        size_t newCarPos = pos.tpos + e.text.length();
         if (e.text.find(CRLF) >= 0) {
             rebuildFrom(pos);
 
@@ -527,7 +530,7 @@ void Viewer::update(UpdateEvent e)
         setCaret(newCarPos);
 
     } else if (e.text == "") { // delete // TODO check nullptr
-        if (!mCaretVisible || e.to != mCaret.tpos) pos = Pos(e.to);
+        if (!mCaret.valid || e.to != mCaret.tpos) pos = Pos(e.to);
         int d = e.to - e.from;
         if (pos.off - d < 0) { // delete across lines
             rebuildFrom(Pos(e.from));
@@ -547,10 +550,10 @@ void Viewer::update(UpdateEvent e)
 
 void Viewer::paint()
 {
-
     if (mFirstLine == nullptr) {
         mFirstLine = fill(TOP, getHeight() - BOTTOM, 0);
         mCaret = Pos(0);
+        mCaret.valid = true;
     }
 
     Line * line = mFirstLine;
@@ -558,8 +561,9 @@ void Viewer::paint()
         drawString(line->text, line->x, line->base, mCurrentFont);
         line = line->next;
     }
-    if (mCaretVisible)
-        invertCaret();
+
+    if (mCaret.valid)
+        invertCaret("black");
 
     if (mSel.valid)
         invertSelection(mSel.beg, mSel.end);
