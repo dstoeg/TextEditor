@@ -95,8 +95,20 @@ size_t Viewer::getWidth()
 
 void Viewer::repaint(size_t x, size_t y, size_t width, size_t height)
 {
-    // TODO
-    QMetaObject::invokeMethod(mCanvas, "requestPaint");
+    QMetaObject::invokeMethod(mCanvas, "repaint",
+                              Q_ARG(QVariant, x),
+                              Q_ARG(QVariant, y),
+                              Q_ARG(QVariant, width),
+                              Q_ARG(QVariant, height));
+}
+
+void Viewer::invertSelectionOnCanvas(size_t x, size_t y, size_t width, size_t height)
+{
+    QMetaObject::invokeMethod(mCanvas, "invertSelection",
+                              Q_ARG(QVariant, x),
+                              Q_ARG(QVariant, y),
+                              Q_ARG(QVariant, width),
+                              Q_ARG(QVariant, height));
 }
 
 //--------------------------------------------------------------------------
@@ -199,7 +211,6 @@ void Viewer::invertCaret() {
     QMetaObject::invokeMethod(mCanvas, "invertCaret",
                               Q_ARG(QVariant, mCaret.x),
                               Q_ARG(QVariant, mCaret.y));
-    repaint(0,0,0,0);
 }
 
 void Viewer::setCaret(Position pos) {
@@ -229,28 +240,25 @@ void Viewer::removeCaret() {
 
 
 //--------------------------------------------------------------------------
-// selection handling TODO
+// selection handling
 //--------------------------------------------------------------------------
 
 void Viewer::invertSelection(Position beg, Position end)
 {
-    /*
-    g = getGraphics();
-    g.setXORMode(Color.WHITE);
-    Line line = beg.line;
+    Line * line = beg.line;
     int x = beg.x;
-    int y = line.y;
+    int y = line->y;
     int w;
-    int h = line.h;
+    int h = line->h;
     while (line != end.line) {
-        w = line.w + LEFT - x;
-        g.fillRect(x, y, w, h);
-        line = line.next;
-        x = line.x; y = line.y;
+        w = line->w + LEFT - x;
+        invertSelectionOnCanvas(x, y, w, h);
+        line = line->next;
+        x = line->x; y = line->y;
     }
     w = end.x - x;
-    g.fillRect(x, y, w, h);
-    g.setPaintMode(); */
+    invertSelectionOnCanvas(x, y, w, h);
+
 }
 
 void Viewer::setSelection(size_t from, size_t to)
@@ -304,8 +312,9 @@ void Viewer::OnKeyTyped(int key)
 }
 
 //--------------------------------------------------------------------------
-// mouse handling TODO
+// mouse handling
 //--------------------------------------------------------------------------
+bool invert = false;
 
 void Viewer::OnMouseClicked(int x, int y)
 {
@@ -315,11 +324,37 @@ void Viewer::OnMouseClicked(int x, int y)
     mSel = Selection(pos, pos);
     mLastPos = pos;
     mLastPos.valid = true;
+    paint();
 }
 
 void Viewer::OnMouseDragged(int x, int y)
 {
+    if (mSel.valid == false)
+        return;
 
+    Position pos = Pos(x, y);
+    if (pos.tpos < mSel.beg.tpos) {
+        if (mLastPos.tpos >= mSel.end.tpos) {
+            invertSelection(mSel.beg, mLastPos);
+            mSel.end = mSel.beg;
+        }
+        invertSelection(pos, mSel.beg);
+        mSel.beg = pos;
+    } else if (pos.tpos > mSel.end.tpos) {
+        if (mLastPos.tpos <= mSel.beg.tpos) {
+            invertSelection(mLastPos, mSel.end);
+            mSel.beg = mSel.end;
+        }
+        invertSelection(mSel.end, pos);
+        mSel.end = pos;
+    } else if (pos.tpos < mLastPos.tpos) { // beg <= pos <= end; clear pos..end
+        invertSelection(pos, mSel.end);
+        mSel.end = pos;
+    } else if (mLastPos.tpos < pos.tpos) { // beg <= pos <= end; clear beg..pos
+        invertSelection(mSel.beg, pos);
+        mSel.beg = pos;
+    }
+    mLastPos = pos;
 }
 
 void Viewer::OnMouseReleased()
@@ -368,6 +403,8 @@ Line * Viewer::fill(size_t top, size_t bottom, size_t pos)
 {
     // TODO adapt to different font sizes
     QFontMetrics m(mCurrentFont);
+
+    Logger::dumpTextList(*mText);
 
     Line * first = nullptr;
     Line * line = nullptr;
@@ -480,6 +517,7 @@ void Viewer::update(UpdateEvent e)
 
 void Viewer::paint()
 {
+
     if (mFirstLine == nullptr) {
         mFirstLine = fill(TOP, getHeight() - BOTTOM, 0);
         mCaret = Pos(0);
@@ -495,6 +533,5 @@ void Viewer::paint()
 
     if (mSel.valid)
         invertSelection(mSel.beg, mSel.end);
-
 }
 

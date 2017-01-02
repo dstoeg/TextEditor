@@ -9,6 +9,7 @@ Canvas {
     focus: true
     objectName: "canvas"
     anchors.fill: parent
+    antialiasing: false
 
     MouseArea {
         anchors.fill: parent
@@ -40,7 +41,9 @@ Canvas {
     {
         var ctx = getContext("2d");
         ctx.font = font;
+        ctx.fillStyle = "black";
         ctx.fillText(qsTr(text), x, y);
+        ctx.stroke();
     }
 
     property bool caret: false;
@@ -62,7 +65,22 @@ Canvas {
             y++;
             ctx.stroke();
         }
+    }
 
+    function invertSelection(x, y, width, height)
+    {
+        var ctx = getContext("2d");
+        ctx.save();
+        ctx.globalCompositeOperation = "xor";
+        ctx.fillRect(x, y, width, height);
+        ctx.restore();
+    }
+
+    function repaint(x, y, width, height)
+    {
+        var ctx = getContext("2d");
+        ctx.clearRect(x,y,width, height);
+        requestPaint();
     }
 
     onPaint: {

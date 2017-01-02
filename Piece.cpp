@@ -16,8 +16,7 @@ Piece::Piece(std::string file, size_t length, size_t pos, Piece * next, bool dum
     mFileName = file;
     mLength = length;
     mFilePos = pos;
-	mNext = next;
-	mFileStream.open(mFileName);
+    mNext = next;
 	mIsDummy = dummy;
 
     // default font Calibri 20px
@@ -51,6 +50,8 @@ std::string Piece::getText()
 	if (mIsDummy)
 		return "";
 
+    mFileStream.open(mFileName);
+
     // open file
     if(!mFileStream.is_open())
     {
@@ -69,6 +70,7 @@ std::string Piece::getText()
     mFileStream.seekg(mFilePos);
     text.resize(mLength);
     mFileStream.read(&text[0], mLength);
+    mFileStream.close();
 
     return text;
 }

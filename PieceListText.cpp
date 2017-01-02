@@ -93,12 +93,18 @@ char PieceListText::charAt(size_t pos)
     size_t count = 0;
     Piece * piece = mFirstPiece;
 
+    // skip dummy piece
+    if (piece->getNext() == nullptr)
+        return '\0';
+    piece = piece->getNext();
+
     while (piece != nullptr)
     {
         if (pos < count + piece->getLength())
         {
             // in this piece
-            return piece->getText()[pos - count];
+            std::string text = piece->getText();
+            return text[pos - count];
         }
         count += piece->getLength();
         piece = piece->getNext();

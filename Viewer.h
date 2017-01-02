@@ -92,6 +92,7 @@ private:
     size_t getHeight();
     size_t getWidth();
     void repaint(size_t x, size_t y, size_t width, size_t height);
+    void invertSelectionOnCanvas(size_t x, size_t y, size_t width, size_t height);
 
     //--------------------------------------------------------------------------
     // members

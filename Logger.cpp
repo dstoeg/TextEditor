@@ -3,18 +3,19 @@
 
 #include <iostream>
 #include <sstream>
+#include <QDebug>
 
 void Logger::dumpText(PieceListText & text)
 {
 	Piece * piece = text.getFirst();
 
-	std::cout << "|";
+    qDebug() << "|";
 	while (piece != nullptr)
 	{
-		std::cout << piece->getText() << "|";
+        qDebug() << QString::fromStdString(piece->getText()) << "|";
 		piece = piece->getNext();
 	}
-	std::cout << std::endl;
+    qDebug() << "\n";
 }
 
 void Logger::dumpTextList(PieceListText & text)
@@ -24,17 +25,17 @@ void Logger::dumpTextList(PieceListText & text)
 	size_t cnt = 0;
 	while (piece != nullptr)
 	{
-		std::cout << "Piece " << cnt << std::endl;
-		std::cout << "Text: " << piece->getText() << std::endl;
-		std::cout << "Size: " << piece->getLength() << std::endl;
-		std::cout << "File: " << piece->getFile() << std::endl;
-		std::cout << "Pos:  " << piece->getFilePos() << std::endl;
-		std::cout << " ---------------------------------------------------------" << std::endl;
+        qDebug() << "Piece " << cnt << "\n";
+        qDebug() << "Text: " << QString::fromStdString(piece->getText()) << "\n";
+        qDebug() << "Size: " << piece->getLength() << "\n";
+        qDebug() << "File: " << QString::fromStdString(piece->getFile()) << "\n";
+        qDebug() << "Pos:  " << piece->getFilePos() << "\n";
+        qDebug() << " ---------------------------------------------------------" << "\n";
 		piece = piece->getNext();
 		cnt++;
 	}
 	
-	std::cout << "Total Size: " << text.getLength() << std::endl;
+    qDebug() << "Total Size: " << text.getLength() << "\n";
 
 }
 
