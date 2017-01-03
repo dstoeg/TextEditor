@@ -212,6 +212,7 @@ void Viewer::invertCaret(QString color) {
                               Q_ARG(QVariant, mCaret.x),
                               Q_ARG(QVariant, mCaret.y),
                               Q_ARG(QVariant, color));
+    QMetaObject::invokeMethod(mCanvas, "requestPaint");
 }
 
 void Viewer::setCaret(Position pos) {
@@ -220,6 +221,7 @@ void Viewer::setCaret(Position pos) {
     mCaret = pos;
     mCaret.valid = true;
     invertCaret("black");
+
 }
 
 void Viewer::setCaret(size_t tpos) {
@@ -227,6 +229,7 @@ void Viewer::setCaret(size_t tpos) {
         setCaret(Pos(tpos));
     else
         mCaret.valid = false;
+
 }
 
 void Viewer::setCaret(size_t x, size_t y) {
@@ -259,7 +262,6 @@ void Viewer::invertSelection(Position beg, Position end)
     }
     w = end.x - x;
     invertSelectionOnCanvas(x, y, w, h);
-
 }
 
 void Viewer::setSelection(size_t from, size_t to)
@@ -395,8 +397,6 @@ void Viewer::OnMouseReleased()
     if (mSel.beg.tpos == mSel.end.tpos)
         setCaret(mSel.beg);
     mLastPos.valid = false;
-    QMetaObject::invokeMethod(mCanvas, "requestPaint");
-
 }
 
 //--------------------------------------------------------------------------
@@ -529,12 +529,15 @@ void Viewer::update(UpdateEvent e)
         }
         setCaret(newCarPos);
 
-    } else if (e.text == "") { // delete // TODO check nullptr
-        if (!mCaret.valid || e.to != mCaret.tpos) pos = Pos(e.to);
+    }
+    else if (e.text == "") { // delete // TODO check nullptr
+        if (!mCaret.valid || e.to != mCaret.tpos)
+            pos = Pos(e.to);
         int d = e.to - e.from;
         if (pos.off - d < 0) { // delete across lines
             rebuildFrom(Pos(e.from));
-        } else { // delete within a line
+        }
+        else { // delete within a line
             b = pos.line->text;
             //b.delete(pos.off - d, pos.off); // TODO check
             b.erase(pos.off - d, d);

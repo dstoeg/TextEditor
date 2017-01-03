@@ -70,6 +70,7 @@ Canvas {
         var ctx = getContext("2d");
         ctx.save();
         ctx.globalCompositeOperation = "xor";
+        ctx.fillColor = "white"
         ctx.fillRect(x, y, width, height);
         ctx.restore();
     }

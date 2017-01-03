@@ -50,7 +50,8 @@ void PieceListText::insert(size_t pos, char c)
 
 	p->setLength(p->getLength() + 1);
 	mLength++;
-    notify(UpdateEvent(pos, pos, std::to_string(c)));
+    std::string letter(1,c);
+    notify(UpdateEvent(pos, pos, letter));
 }
 
 void PieceListText::insert(size_t pos, std::string const& str)
@@ -88,7 +89,7 @@ void PieceListText::delete_(size_t from, size_t to)
 	Piece * a = split(from);
 	Piece * b = split(to);
 	a->setNext(b->getNext());
-    notify(UpdateEvent(from, to, nullptr));
+    notify(UpdateEvent(from, to, ""));
 }
 
 char PieceListText::charAt(size_t pos)
