@@ -4,6 +4,7 @@
 #include "Helpers.h"
 #include <iostream>
 #include <sstream>
+#include <cassert>
 #include <QVariant>
 #include <QDebug>
 #include <QFontMetrics>
@@ -34,7 +35,20 @@ Viewer::Viewer(PieceListText * text, QObject * canvas) : QObject(0)
 
 bool Viewer::OnLoadFile(QString str)
 {
-    return mText->load(str.toStdString());
+    if (mText->load(str.toStdString()))
+    {
+        if (!Parser::fileHasHeader(str.toStdString()))
+        {
+            Piece * p = mText->getFirst();
+            while (p != nullptr)
+            {
+                p->setFont(mCurrentFont);
+                p = p->getNext();
+            }
+        }
+        return true;
+    }
+    return false;
 }
 
 bool Viewer::OnSaveFile(QString file)
@@ -110,6 +124,7 @@ void Viewer::invertSelectionOnCanvas(int x, int y, int width, int height)
                               Q_ARG(QVariant, width),
                               Q_ARG(QVariant, height));
 }
+
 
 //--------------------------------------------------------------------------
 // position handling
@@ -475,11 +490,16 @@ Line * Viewer::fill(int top, int bottom, int pos)
         }
 
         std::string str = buf.str();
+
+        // new
+        int begin = pos - str.size();
+        line->firstPiece = mText->split(begin)->getNext();
+
         line->len = str.size();
-        line->text = str;
+        //line->text = str;
         line->x = LEFT;
         line->y = y;
-        line->w = stringWidth(m, line->text);
+        line->w = getLineWidth(line); //(m, line->text);
         line->h = m.height();
         line->base = y + m.ascent();
         y += line->h;
@@ -522,9 +542,9 @@ void Viewer::update(UpdateEvent e)
             //if (pos.y + pos.line->h > getHeight() - BOTTOM)
             //    scrollBar.setValue(firstTpos + firstLine->len); TODO scrollbar
         } else {
-            b = pos.line->text;
-            b.insert(pos.off, e.text);
-            pos.line->text = b;
+            //b = pos.line->text;
+            //b.insert(pos.off, e.text);
+            //pos.line->text = b; // TODO
             pos.line->w += stringWidth(m, e.text);
             pos.line->len += e.text.length();
             mLastTpos += e.text.length();
@@ -541,11 +561,11 @@ void Viewer::update(UpdateEvent e)
             rebuildFrom(Pos(e.from));
         }
         else { // delete within a line
-            b = pos.line->text;
+            //b = pos.line->text;
             //b.delete(pos.off - d, pos.off); // TODO check
-            b.erase(pos.off - d, d);
-            pos.line->text = b;
-            pos.line->w = stringWidth(m, pos.line->text);
+            //b.erase(pos.off - d, d);
+            //pos.line->text = b; // TODO
+            pos.line->w = getLineWidth(pos.line); //stringWidth(m, pos.line->text); // TODO
             pos.line->len -= d;
             mLastTpos -= d;
             repaint(pos.line->x, pos.line->y, getWidth(), pos.line->h+1);
@@ -564,7 +584,8 @@ void Viewer::paint()
 
     Line * line = mFirstLine;
     while (line != nullptr) {
-        drawString(line->text, line->x, line->base, mCurrentFont);
+        //drawString(line->text, line->x, line->base, mCurrentFont); // REMOVE
+        drawLine(line);
         line = line->next;
     }
 
@@ -573,5 +594,55 @@ void Viewer::paint()
 
     if (mSel.valid)
         invertSelection(mSel.beg, mSel.end);
+}
+
+void Viewer::drawLine(Line * line)
+{
+    if (line == nullptr)
+    {
+        assert(false);
+        return;
+    }
+
+    int x = line->x;
+    int y = line->base;
+
+    Piece * p = line->firstPiece;
+    size_t count = 0;
+    while (p != nullptr && count < line->len)
+    {
+        std::string text = p->getText();
+        count += text.size();
+        if (count > line->len)
+            break;
+        drawString(text, x, y, p->getFont());
+        x += stringWidth(QFontMetrics(p->getFont()), text);
+        p = p->getNext();
+    }
+}
+
+int Viewer::getLineWidth(Line * line)
+{
+    /*
+    if (line == nullptr)
+    {
+        assert(false);
+        return 0;
+    }
+
+    Piece * p = line->firstPiece;
+    size_t count = 0;
+    int width = 0;
+    while (p != nullptr && count < line->len)
+    {
+        std::string text = p->getText();
+        count += text.size();
+        if (count > line->len)
+            break;
+        width += this->stringWidth(QFontMetrics(p->getFont()), text);
+        p = p->getNext();
+    }
+    return width;*/
+    return 500;
 }
 

@@ -25,11 +25,13 @@ ToolBar {
                     ListElement { text: "Arial";}
                 }
 
+                objectName: "FontCB";
+
                 onCurrentIndexChanged: viewer.OnFontChanged(currentText);
             }
 
             ComboBox {
-                currentIndex: 1
+                currentIndex: 2
                 Layout.preferredWidth: 80
 
                 model: ListModel {

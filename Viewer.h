@@ -29,6 +29,8 @@ public:
     Q_INVOKABLE void OnFontSizeChanged(int size);
     Q_INVOKABLE void OnFontStyleChanged(bool bold, bool italic, bool underlined);
 
+
+
     //--------------------------------------------------------------------------
     // mouse handling
     //--------------------------------------------------------------------------
@@ -48,6 +50,7 @@ public:
     //--------------------------------------------------------------------------
     virtual void update(UpdateEvent e) override;
     Q_INVOKABLE void paint();
+    void drawLine(Line * line);
 
 private:
 
@@ -116,6 +119,12 @@ private:
     const char       EOF_ = '\0';
     //const std::string   CRLF_ = "\r\n";
     const char CRLF_ = '\n';
+
+
+    //--------------------------------------------------------------------------
+    // font metrics calculations
+    //--------------------------------------------------------------------------
+    int getLineWidth(Line * line);
 };
 
 #endif // VIEWER_H

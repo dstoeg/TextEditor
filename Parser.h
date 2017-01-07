@@ -12,6 +12,7 @@ public:
     static Piece * parseFile(std::string const& file, int & length);
 	static bool writeFile(std::string const& file, Piece * first);
     static std::string getFontAsString(QFont const& font);
+    static bool fileHasHeader(std::string const& file);
 
 private:
 	static int parseNextInt(std::ifstream & file);

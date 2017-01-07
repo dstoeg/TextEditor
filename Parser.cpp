@@ -67,6 +67,7 @@ Piece * Parser::parseFile(std::string const& file, int & length)
 		first = nullptr;
 		length = 0;
 	}
+    f.close();
 	return first;
 }
 
@@ -188,4 +189,17 @@ std::string Parser::getFontAsString(QFont const& font)
     fontStr.append(font.family().toStdString());
 
     return fontStr;
+}
+
+bool Parser::fileHasHeader(std::string const& file)
+{
+    std::ifstream f(file);
+    bool ret = false;
+    if (f.is_open())
+    {
+        char in = f.get();
+        ret = (in == EXISTS_HEADER);
+        f.close();
+    }
+    return ret;
 }

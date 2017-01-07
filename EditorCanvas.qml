@@ -86,4 +86,5 @@ Canvas {
         viewer.paint();
         //console.log("paint called")
     }
+
 }

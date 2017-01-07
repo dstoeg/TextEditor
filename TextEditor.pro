@@ -10,7 +10,8 @@ SOURCES += main.cpp \
     Piece.cpp \
     PieceListText.cpp \
     Viewer.cpp \
-    UpdateEvent.cpp
+    UpdateEvent.cpp \
+    line.cpp
 
 RESOURCES += qml.qrc
 
