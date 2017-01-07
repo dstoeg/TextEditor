@@ -83,17 +83,17 @@ void Viewer::OnFontStyleChanged(bool bold, bool italic, bool underlined)
 // delegates to canvas
 //--------------------------------------------------------------------------
 
-size_t Viewer::getHeight()
+int Viewer::getHeight()
 {
     return QQmlProperty::read(mCanvas, "height").toInt();
 }
 
-size_t Viewer::getWidth()
+int Viewer::getWidth()
 {
     return QQmlProperty::read(mCanvas, "width").toInt();
 }
 
-void Viewer::repaint(size_t x, size_t y, size_t width, size_t height)
+void Viewer::repaint(int x, int y, int width, int height)
 {
     QMetaObject::invokeMethod(mCanvas, "repaint",
                               Q_ARG(QVariant, x),
@@ -102,7 +102,7 @@ void Viewer::repaint(size_t x, size_t y, size_t width, size_t height)
                               Q_ARG(QVariant, height));
 }
 
-void Viewer::invertSelectionOnCanvas(size_t x, size_t y, size_t width, size_t height)
+void Viewer::invertSelectionOnCanvas(int x, int y, int width, int height)
 {
     QMetaObject::invokeMethod(mCanvas, "invertSelection",
                               Q_ARG(QVariant, x),
@@ -115,7 +115,7 @@ void Viewer::invertSelectionOnCanvas(size_t x, size_t y, size_t width, size_t he
 // position handling
 //--------------------------------------------------------------------------
 
-Position Viewer::Pos(size_t x, size_t y)
+Position Viewer::Pos(int x, int y)
 {
     Position pos;
     if (y >= getHeight() - BOTTOM)
@@ -143,14 +143,14 @@ Position Viewer::Pos(size_t x, size_t y)
         pos.x = line->x + line->w;
         pos.off = line->len;
         if (pos.org + line->len < mText->getLength())
-            pos.off -= 2;
+            pos.off -= 1; // CHECK ??? 2
     }
     else {
         pos.x = line->x;
         QFontMetrics m(mCurrentFont);
-        size_t i = pos.org;
+        int i = pos.org;
         char ch = mText->charAt(i);
-        size_t w = charWidth(m, ch);
+        int w = charWidth(m, ch);
         while (x >= pos.x + w) {
             pos.x += w;
             i++;
@@ -163,7 +163,7 @@ Position Viewer::Pos(size_t x, size_t y)
     return pos;
 }
 
-Position Viewer::Pos(size_t tpos)
+Position Viewer::Pos(int tpos)
 {
     if (tpos < mFirstTpos)
         tpos = mFirstTpos;
@@ -193,7 +193,7 @@ Position Viewer::Pos(size_t tpos)
         pos.line = line;
         pos.off = tpos - pos.org;
         QFontMetrics m(mCurrentFont);
-        size_t i = pos.org;
+        int i = pos.org;
         while (i < tpos) {
             char ch = mText->charAt(i); i++;
             pos.x += charWidth(m, ch);
@@ -224,7 +224,7 @@ void Viewer::setCaret(Position pos) {
 
 }
 
-void Viewer::setCaret(size_t tpos) {
+void Viewer::setCaret(int tpos) {
     if (tpos >= mFirstTpos && tpos <= mLastTpos)
         setCaret(Pos(tpos));
     else
@@ -232,7 +232,7 @@ void Viewer::setCaret(size_t tpos) {
 
 }
 
-void Viewer::setCaret(size_t x, size_t y) {
+void Viewer::setCaret(int x, int y) {
     setCaret(Pos(x, y));
 }
 
@@ -250,10 +250,10 @@ void Viewer::removeCaret() {
 void Viewer::invertSelection(Position beg, Position end)
 {
     Line * line = beg.line;
-    size_t x = beg.x;
-    size_t y = line->y;
-    size_t w;
-    size_t h = line->h;
+    int x = beg.x;
+    int y = line->y;
+    int w;
+    int h = line->h;
     while (line != end.line) {
         w = line->w + LEFT - x;
         invertSelectionOnCanvas(x, y, w, h);
@@ -264,7 +264,7 @@ void Viewer::invertSelection(Position beg, Position end)
     invertSelectionOnCanvas(x, y, w, h);
 }
 
-void Viewer::setSelection(size_t from, size_t to)
+void Viewer::setSelection(int from, int to)
 {
     if (from < to) {
         removeCaret();
@@ -291,24 +291,27 @@ void Viewer::removeSelection()
 void Viewer::OnKeyPressed(int key)
 {
     if (mCaret.valid) {
-        size_t pos = mCaret.tpos;
+        int pos = mCaret.tpos;
         char ch;
         if (key == Qt::Key_Right) {
+            if (mCaret.tpos == mLastTpos) return;
             pos++;
             ch = mText->charAt(pos);
-            if (ch == '\n')
-                pos++;
+            /*if (ch == '\n')
+                pos++;*/
             setCaret(pos);
         }
         else if (key == Qt::Key_Left) {
+            if (mCaret.tpos == 0) return;
             pos--;
             ch = mText->charAt(pos);
-            if (ch == '\n')
-                pos--;
+            /*if (ch == '\n')
+                pos--;*/
             setCaret(pos);
         }
         else if (key == Qt::Key_Up) {
             setCaret(mCaret.x, mCaret.y - mCaret.line->h);
+
         }
         else if (key == Qt::Key_Down) {
             setCaret(mCaret.x, mCaret.y + mCaret.line->h);
@@ -330,15 +333,15 @@ void Viewer::OnKeyTyped(int key)
     if (mCaret.valid) {
         if (key == Qt::Key_Backspace) {
             if (mCaret.tpos > 0 && !selection) {
-                int d = mCaret.off == 0 ? 2 : 1;
+                int d = 1; //2; //mCaret.off == 0 ? 2 : 1; // CHANGED
                 mText->delete_(mCaret.tpos - d, mCaret.tpos);
             }
         }
         else if (key == Qt::Key_Escape) {
             // nothing
         }
-        else if (key == Qt::Key_Enter) {
-            mText->insert(mCaret.tpos, CRLF);
+        else if (key == Qt::Key_Return) {
+            mText->insert(mCaret.tpos, CRLF_);
         }
         else {
             mText->insert(mCaret.tpos, char(key));
@@ -359,7 +362,7 @@ void Viewer::OnMouseClicked(int x, int y)
     mSel = Selection(pos, pos);
     mLastPos = pos;
     mLastPos.valid = true;
-
+    qDebug() << "position: " << mSel.beg.tpos << " char: " << mText->charAt(mSel.beg.tpos);
 }
 
 void Viewer::OnMouseDragged(int x, int y)
@@ -403,14 +406,14 @@ void Viewer::OnMouseReleased()
 // tab handling
 //--------------------------------------------------------------------------
 
-size_t Viewer::stringWidth(QFontMetrics m, std::string const& s)
+int Viewer::stringWidth(QFontMetrics m, std::string const& s)
 {
     std::string s1 = Helpers::ReplaceTabs(s);
     QString qs = QString::fromStdString(s1);
     return m.width(qs);
 }
 
-size_t Viewer::charWidth(QFontMetrics m, char ch)
+int Viewer::charWidth(QFontMetrics m, char ch)
 {
     if (ch == '\t')
         return 4 * m.width(' ');
@@ -418,7 +421,7 @@ size_t Viewer::charWidth(QFontMetrics m, char ch)
         return m.width(ch);
 }
 
-void Viewer::drawString(std::string const& s, size_t x, size_t y, QFont const& font)
+void Viewer::drawString(std::string const& s, int x, int y, QFont const& font)
 {
     QString qs(Helpers::ReplaceTabs(s).c_str());
     QString qfont(Parser::getFontAsString(font).c_str());
@@ -434,14 +437,14 @@ void Viewer::drawString(std::string const& s, size_t x, size_t y, QFont const& f
 // line handling
 //--------------------------------------------------------------------------
 
-Line * Viewer::fill(size_t top, size_t bottom, size_t pos)
+Line * Viewer::fill(int top, int bottom, int pos)
 {
     // TODO adapt to different font sizes
     QFontMetrics m(mCurrentFont);
 
     Line * first = nullptr;
     Line * line = nullptr;
-    size_t y = top;
+    int y = top;
     mLastTpos = pos;
     char ch = mText->charAt(pos);
 
@@ -512,8 +515,8 @@ void Viewer::update(UpdateEvent e)
 
     if (e.from == e.to) { // insert
         if (e.from != mCaret.tpos) pos = Pos(e.from);
-        size_t newCarPos = pos.tpos + e.text.length();
-        if (e.text.find(CRLF) >= 0) {
+        int newCarPos = pos.tpos + e.text.length();
+        if (e.text.find(CRLF_) != std::string::npos) {
             rebuildFrom(pos);
 
             //if (pos.y + pos.line->h > getHeight() - BOTTOM)

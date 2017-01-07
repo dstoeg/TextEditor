@@ -84,6 +84,6 @@ Canvas {
 
     onPaint: {
         viewer.paint();
-        console.log("paint called")
+        //console.log("paint called")
     }
 }

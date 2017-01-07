@@ -7,8 +7,8 @@
 class UpdateEvent
 {
 public:
-    size_t from;
-    size_t to;
+    int from;
+    int to;
     std::string text;
     UpdateEvent(int a, int b, std::string const& t);
 };

@@ -11,7 +11,7 @@ Piece::Piece()
 
 }
 
-Piece::Piece(std::string file, size_t length, size_t pos, Piece * next, bool dummy)
+Piece::Piece(std::string file, int length, int pos, Piece * next, bool dummy)
 {
     mFileName = file;
     mLength = length;
@@ -27,7 +27,7 @@ Piece::Piece(std::string file, size_t length, size_t pos, Piece * next, bool dum
     mFont.setUnderline(false);
 }
 
-Piece::Piece(std::string file, size_t length, size_t pos, Piece * next, QFont font, bool dummy)
+Piece::Piece(std::string file, int length, int pos, Piece * next, QFont font, bool dummy)
     : Piece(file, length, pos, next, dummy)
 {
     mFont = font;
@@ -67,20 +67,30 @@ std::string Piece::getText()
     }
 
     // read pos -> length
+    /*
     mFileStream.seekg(mFilePos);
     text.resize(mLength);
     mFileStream.read(&text[0], mLength);
-    mFileStream.close();
+    */
 
-    return text;
+    // code above temporatily replaced by following HACK
+    std::ifstream t(mFileName);
+    std::string str((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
+    t.close();
+
+    size_t strSize = str.size();
+    if (strSize < mFilePos + mLength)
+        assert(false);
+
+    return str.substr(mFilePos, mLength);
 }
 
-size_t Piece::getLength() const
+int Piece::getLength() const
 {
 	return mLength;
 }
 
-void Piece::setLength(size_t length)
+void Piece::setLength(int length)
 {
 	mLength = length;
 }
@@ -90,7 +100,7 @@ std::string Piece::getFile() const
 	return mFileName;
 }
 
-size_t Piece::getFilePos() const
+int Piece::getFilePos() const
 {
 	return mFilePos;
 }

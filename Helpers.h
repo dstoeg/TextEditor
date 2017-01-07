@@ -6,7 +6,7 @@
 
 namespace Helpers
 {
-	size_t GetFileSize(std::string const& file);
+    int GetFileSize(std::string const& file);
 
     std::string ReplaceTabs(std::string const& text);
 }

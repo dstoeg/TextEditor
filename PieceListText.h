@@ -13,25 +13,25 @@ public:
     ~PieceListText();
 
     // basic
-    void insert(size_t pos, char c);
-    void insert(size_t pos, std::string const& str);
-    Piece * split(size_t pos);
-    void delete_(size_t from, size_t to);
-    char charAt(size_t pos);
+    void insert(int pos, char c);
+    void insert(int pos, std::string const& str);
+    Piece * split(int pos);
+    void delete_(int from, int to);
+    char charAt(int pos);
 
     // load / store
     bool load(std::string const& file);
 	bool save();
 
 	Piece * getFirst() const;
-	size_t getLength() const;
+    int getLength() const;
 
     // listeners
     void addListener(UpdateEventListener * listener);
     void removeListener(UpdateEventListener * listener);
 
 private:
-    size_t mLength;
+    int mLength;
     Piece * mFirstPiece;
     std::string mScratchFileName;
 	std::fstream mScratchFileStream;

@@ -8,21 +8,21 @@
 void Logger::dumpText(PieceListText & text)
 {
 	Piece * piece = text.getFirst();
-
-    qDebug() << "|";
+    QString str;
+    str += "|";
 	while (piece != nullptr)
 	{
-        qDebug() << QString::fromStdString(piece->getText()) << "|";
+        str += QString::fromStdString(piece->getText()) + "|";
 		piece = piece->getNext();
 	}
-    qDebug() << "\n";
+    qDebug() << str;
 }
 
 void Logger::dumpTextList(PieceListText & text)
 {
 	Piece * piece = text.getFirst();
 	
-	size_t cnt = 0;
+    int cnt = 0;
 	while (piece != nullptr)
 	{
         qDebug() << "Piece " << cnt << "\n";
@@ -50,4 +50,9 @@ std::string Logger::getText(PieceListText & text)
         piece = piece->getNext();
     }
     return s.str();
+}
+
+void Logger::debugPrint(std::string const& text)
+{
+    qDebug() << QString::fromStdString(text) << "\n";
 }

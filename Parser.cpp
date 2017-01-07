@@ -15,7 +15,7 @@ char const EXISTS_HEADER = char(127);
 #define cOFFSET_LEN	10
 
 
-Piece * Parser::parseFile(std::string const& file, size_t & length)
+Piece * Parser::parseFile(std::string const& file, int & length)
 {
 	Piece * first = nullptr;
 	std::ifstream f(file);
@@ -32,7 +32,7 @@ Piece * Parser::parseFile(std::string const& file, size_t & length)
 			// read pieces
 			first = new Piece("", 0, 0, nullptr, true);
 			Piece * previous = first;
-			size_t pos = offset;
+            int pos = offset;
 			while ((int)f.tellg() < offset)
 			{
 				int len = parseNextInt(f);
@@ -99,7 +99,7 @@ bool Parser::writeFile(std::string const& file, Piece * first)
 	header << EXISTS_HEADER;
 
 	// write offset
-	size_t offset = header.str().size() + info.str().size() + cOFFSET_LEN;
+    int offset = header.str().size() + info.str().size() + cOFFSET_LEN;
 	header << std::setw(cOFFSET_LEN) << offset;
 
 	// put it all together
@@ -156,7 +156,7 @@ QFont Parser::parseFont(std::string const& font, std::string const& style)
 {
     QFont qFont;
 
-    size_t idx = font.find("px");
+    int idx = font.find("px");
     int size = std::stoi(font.substr(0, idx));
     qFont.setPixelSize(size);
 

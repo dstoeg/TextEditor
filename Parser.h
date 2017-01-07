@@ -9,7 +9,7 @@ class Parser
 {
 public:
 
-	static Piece * parseFile(std::string const& file, size_t & length);
+    static Piece * parseFile(std::string const& file, int & length);
 	static bool writeFile(std::string const& file, Piece * first);
     static std::string getFontAsString(QFont const& font);
 

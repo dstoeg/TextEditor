@@ -2,11 +2,13 @@
 #include "PieceListText.h"
 #include "Helpers.h"
 #include "Parser.h"
+#include "Logger.h"
 
 #include <fstream>
 #include <iostream>
 #include <cassert>
 #include <sstream>
+#include <QDebug>
 
 std::string const cScratchFileName = "scratch.txt";
 
@@ -32,12 +34,12 @@ PieceListText::~PieceListText()
     }
 }
 
-void PieceListText::insert(size_t pos, char c)
+void PieceListText::insert(int pos, char c)
 {
 	Piece * p = split(pos); 
 
-	size_t last_index = p->getFilePos() + p->getLength();
-	size_t scratchFileSize = Helpers::GetFileSize(mScratchFileName);
+    int last_index = p->getFilePos() + p->getLength();
+    int scratchFileSize = Helpers::GetFileSize(mScratchFileName);
 	if (!(p->getFile() == cScratchFileName && last_index == scratchFileSize))
 	{
 		Piece * q = new Piece(mScratchFileName, 0, scratchFileSize, p->getNext());
@@ -48,26 +50,26 @@ void PieceListText::insert(size_t pos, char c)
 	mScratchFileStream << c;
 	mScratchFileStream.flush();
 
-	p->setLength(p->getLength() + 1);
+    p->setLength(p->getLength() + 1);
 	mLength++;
     std::string letter(1,c);
     notify(UpdateEvent(pos, pos, letter));
 }
 
-void PieceListText::insert(size_t pos, std::string const& str)
+void PieceListText::insert(int pos, std::string const& str)
 {
-    for (size_t i=0; i<str.size(); i++)
+    for (int i=0; i<str.size(); i++)
         insert(pos++, str[i]);
 }
 
-Piece * PieceListText::split(size_t pos)
+Piece * PieceListText::split(int pos)
 {
 	if (pos == 0) return mFirstPiece;
 
 	//--- set p to piece containing pos
 	Piece * p = mFirstPiece;
 
-	size_t len = p->getLength();
+    int len = p->getLength();
 	while (pos > len) {
 		p = p->getNext();
 		len = len + p->getLength();
@@ -75,8 +77,8 @@ Piece * PieceListText::split(size_t pos)
 
 	//--- split piece p
 	if (pos != len) {
-		size_t len2 = len - pos;
-		size_t len1 = p->getLength() - len2;
+        int len2 = len - pos;
+        int len1 = p->getLength() - len2;
 		p->setLength(len1);
 		Piece * q = new Piece(p->getFile(), len2, p->getFilePos() + len1, p->getNext());
 		p->setNext(q);
@@ -84,7 +86,7 @@ Piece * PieceListText::split(size_t pos)
 	return p;
 }
 
-void PieceListText::delete_(size_t from, size_t to)
+void PieceListText::delete_(int from, int to)
 {
 	Piece * a = split(from);
 	Piece * b = split(to);
@@ -92,12 +94,11 @@ void PieceListText::delete_(size_t from, size_t to)
     notify(UpdateEvent(from, to, ""));
 }
 
-char PieceListText::charAt(size_t pos)
+char PieceListText::charAt(int pos)
 {
     if (pos >= mLength)
         return '\0';
 
-    size_t count = 0;
     Piece * piece = mFirstPiece;
 
     // skip dummy piece
@@ -105,6 +106,7 @@ char PieceListText::charAt(size_t pos)
         return '\0';
     piece = piece->getNext();
 
+    int count = 0;
     while (piece != nullptr)
     {
         if (pos < count + piece->getLength())
@@ -116,7 +118,7 @@ char PieceListText::charAt(size_t pos)
         count += piece->getLength();
         piece = piece->getNext();
     }
-    assert(false);
+    //assert(false);
     return  '\0';
 }
 
@@ -125,7 +127,7 @@ Piece * PieceListText::getFirst() const
 	return mFirstPiece;
 }
 
-size_t PieceListText::getLength() const
+int PieceListText::getLength() const
 {
 	return mLength;
 }
@@ -133,7 +135,7 @@ size_t PieceListText::getLength() const
 bool PieceListText::load(std::string const& file)
 {
 	mFileName = file;
-	size_t length = 0;
+    int length = 0;
 
 	Piece * piece = Parser::parseFile(file, length);
 	if (piece != nullptr)
@@ -172,6 +174,9 @@ void PieceListText::removeListener(UpdateEventListener * listener)
 
 void PieceListText::notify(UpdateEvent e)
 {
+    Logger::debugPrint("Update: ");
+    Logger::dumpText(*this);
+
     for (UpdateEventListener * listener : mListeners)
         listener->update(e);
 }

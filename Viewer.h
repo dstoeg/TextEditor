@@ -55,19 +55,19 @@ private:
     // selection handling
     //--------------------------------------------------------------------------
     void invertSelection(Position beg, Position end);
-    void setSelection(size_t from, size_t to);
+    void setSelection(int from, int to);
     void removeSelection();
 
     //--------------------------------------------------------------------------
     // position handling
     //--------------------------------------------------------------------------
-    Position Pos(size_t x, size_t y);
-    Position Pos(size_t tpos);
+    Position Pos(int x, int y);
+    Position Pos(int tpos);
 
     //--------------------------------------------------------------------------
     // line handling
     //--------------------------------------------------------------------------
-    Line * fill(size_t top, size_t bottom, size_t pos);
+    Line * fill(int top, int bottom, int pos);
     void rebuildFrom(Position pos);
 
     //--------------------------------------------------------------------------
@@ -75,24 +75,24 @@ private:
     //--------------------------------------------------------------------------
     void invertCaret(QString color);
     void setCaret(Position pos);
-    void setCaret(size_t tpos);
-    void setCaret(size_t x, size_t y);
+    void setCaret(int tpos);
+    void setCaret(int x, int y);
     void removeCaret();
 
     //--------------------------------------------------------------------------
     // tab handling
     //--------------------------------------------------------------------------
-    size_t stringWidth(QFontMetrics m, std::string const& s);
-    size_t charWidth(QFontMetrics m, char ch);
-    void drawString(std::string const& s, size_t x, size_t y, QFont const& font);
+    int stringWidth(QFontMetrics m, std::string const& s);
+    int charWidth(QFontMetrics m, char ch);
+    void drawString(std::string const& s, int x, int y, QFont const& font);
 
     //--------------------------------------------------------------------------
     // delegates to canvas
     //--------------------------------------------------------------------------
-    size_t getHeight();
-    size_t getWidth();
-    void repaint(size_t x, size_t y, size_t width, size_t height);
-    void invertSelectionOnCanvas(size_t x, size_t y, size_t width, size_t height);
+    int getHeight();
+    int getWidth();
+    void repaint(int x, int y, int width, int height);
+    void invertSelectionOnCanvas(int x, int y, int width, int height);
 
     //--------------------------------------------------------------------------
     // members
@@ -101,8 +101,8 @@ private:
     QFont mCurrentFont;
     PieceListText * mText;
     Line * mFirstLine;       // the lines in this viewer
-    size_t mFirstTpos;       // first text position in this viewer
-    size_t mLastTpos;        // last text position in this viewer
+    int mFirstTpos;       // first text position in this viewer
+    int mLastTpos;        // last text position in this viewer
     Selection mSel;
     Position mCaret;
     Position mLastPos;     // last mouse position: used during mouse dragging
@@ -110,11 +110,12 @@ private:
     //--------------------------------------------------------------------------
     // constants
     //--------------------------------------------------------------------------
-    const size_t        TOP = 10;    // top margin
-    const size_t        BOTTOM = 10; // bottom margin
-    const size_t        LEFT = 10;   // left margin
-    const char          EOF_ = '\0';
-    const std::string   CRLF = "\r\n";
+    const int        TOP = 10;    // top margin
+    const int        BOTTOM = 10; // bottom margin
+    const int        LEFT = 10;   // left margin
+    const char       EOF_ = '\0';
+    //const std::string   CRLF_ = "\r\n";
+    const char CRLF_ = '\n';
 };
 
 #endif // VIEWER_H

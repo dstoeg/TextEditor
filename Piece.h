@@ -9,28 +9,28 @@ class Piece
 {
 public:
     Piece();
-    Piece(std::string file, size_t length, size_t pos, Piece * next, bool dummy = false);
-    Piece(std::string file, size_t length, size_t pos, Piece * next, QFont font, bool dummy = false);
+    Piece(std::string file, int length, int pos, Piece * next, bool dummy = false);
+    Piece(std::string file, int length, int pos, Piece * next, QFont font, bool dummy = false);
 
     void setNext(Piece * next);
     Piece * getNext() const;
 
     std::string getText();
 
-	size_t getLength() const;
-	void setLength(size_t length);
+    int getLength() const;
+    void setLength(int length);
 	
 	std::string getFile() const;
-	size_t getFilePos() const;
+    int getFilePos() const;
 
     QFont getFont() const;
     void setFont(QFont const& font);
 
 private:
-    size_t mLength;
+    int mLength;
     std::string mFileName;
 	std::fstream mFileStream;
-	size_t mFilePos;
+    int mFilePos;
     Piece * mNext;
 	bool mIsDummy;
     QFont mFont;

@@ -459,7 +459,18 @@ release\Logger.obj: Logger.cpp Logger.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qvarlengtharray.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qcontainerfwd.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qobject_impl.h \
-		UpdateEvent.h
+		UpdateEvent.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\QDebug \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qdebug.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qmap.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qtextstream.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qiodevice.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qlocale.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qvariant.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qvector.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qpoint.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qset.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qcontiguouscache.h
 
 release\Parser.obj: Parser.cpp Parser.h \
 		Piece.h \
@@ -740,10 +751,15 @@ release\Viewer.obj: Viewer.cpp Viewer.h \
 		D:\Qt\5.7\msvc2015_64\include\QtGui\qtouchdevice.h \
 		Logger.h \
 		Parser.h \
+		Helpers.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\QVariant \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\QDebug \
 		D:\Qt\5.7\msvc2015_64\include\QtGui\QFontMetrics \
-		D:\Qt\5.7\msvc2015_64\include\QtGui\qfontmetrics.h
+		D:\Qt\5.7\msvc2015_64\include\QtGui\qfontmetrics.h \
+		D:\Qt\5.7\msvc2015_64\include\QtQml\QQmlProperty \
+		D:\Qt\5.7\msvc2015_64\include\QtQml\qqmlproperty.h \
+		D:\Qt\5.7\msvc2015_64\include\QtQml\qtqmlglobal.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qmetaobject.h
 
 release\UpdateEvent.obj: UpdateEvent.cpp UpdateEvent.h
 
