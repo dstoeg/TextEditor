@@ -21,7 +21,7 @@ Piece::Piece(std::string file, int length, int pos, Piece * next, bool dummy)
 
     // default font Calibri 20px
     mFont.setFamily("Calibri");
-    mFont.setPixelSize(20);
+    mFont.setPixelSize(30);
     mFont.setBold(false);
     mFont.setItalic(false);
     mFont.setUnderline(false);

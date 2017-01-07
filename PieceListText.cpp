@@ -34,7 +34,7 @@ PieceListText::~PieceListText()
     }
 }
 
-void PieceListText::insert(int pos, char c)
+void PieceListText::insert(int pos, char c, QFont font)
 {
 	Piece * p = split(pos); 
 
@@ -42,7 +42,7 @@ void PieceListText::insert(int pos, char c)
     int scratchFileSize = Helpers::GetFileSize(mScratchFileName);
 	if (!(p->getFile() == cScratchFileName && last_index == scratchFileSize))
 	{
-		Piece * q = new Piece(mScratchFileName, 0, scratchFileSize, p->getNext());
+        Piece * q = new Piece(mScratchFileName, 0, scratchFileSize, p->getNext(), font);
 		p->setNext(q);
 		p = q;
 	}
@@ -56,10 +56,10 @@ void PieceListText::insert(int pos, char c)
     notify(UpdateEvent(pos, pos, letter));
 }
 
-void PieceListText::insert(int pos, std::string const& str)
+void PieceListText::insert(int pos, std::string const& str, QFont font)
 {
     for (int i=0; i<str.size(); i++)
-        insert(pos++, str[i]);
+        insert(pos++, str[i], font);
 }
 
 Piece * PieceListText::split(int pos)
@@ -174,9 +174,8 @@ void PieceListText::removeListener(UpdateEventListener * listener)
 
 void PieceListText::notify(UpdateEvent e)
 {
-    Logger::debugPrint("Update: ");
     Logger::dumpText(*this);
-
     for (UpdateEventListener * listener : mListeners)
         listener->update(e);
 }
+

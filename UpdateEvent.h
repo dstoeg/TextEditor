@@ -2,6 +2,7 @@
 #define UPDATEEVENT_H
 
 #include <string>
+#include "Piece.h"
 
 
 class UpdateEvent

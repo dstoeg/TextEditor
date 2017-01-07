@@ -7,7 +7,7 @@
 class Line
 {
 public:
-    //std::string text;   // text of this line
+    std::string text;   // text of this line
     int len;         // length of this line (including CRLF)
     int x;           // top left corner
     int y;
@@ -17,6 +17,7 @@ public:
     Line * prev;
     Line * next;
 
+    int begin;
     Piece * firstPiece;
 };
 

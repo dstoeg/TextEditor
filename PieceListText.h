@@ -13,8 +13,8 @@ public:
     ~PieceListText();
 
     // basic
-    void insert(int pos, char c);
-    void insert(int pos, std::string const& str);
+    void insert(int pos, char c, QFont font);
+    void insert(int pos, std::string const& str, QFont font);
     Piece * split(int pos);
     void delete_(int from, int to);
     char charAt(int pos);

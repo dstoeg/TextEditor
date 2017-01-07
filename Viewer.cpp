@@ -21,7 +21,7 @@ Viewer::Viewer(PieceListText * text, QObject * canvas) : QObject(0)
     mLastTpos = 0;
     mLastPos.valid = false;
 
-    // default font Calibri 20px
+    // default font Calibri 30px
     mCurrentFont.setFamily("Calibri");
     mCurrentFont.setPixelSize(30);
     mCurrentFont.setBold(false);
@@ -356,10 +356,10 @@ void Viewer::OnKeyTyped(int key)
             // nothing
         }
         else if (key == Qt::Key_Return) {
-            mText->insert(mCaret.tpos, CRLF_);
+            mText->insert(mCaret.tpos, CRLF_, mCurrentFont);
         }
         else {
-            mText->insert(mCaret.tpos, char(key));
+            mText->insert(mCaret.tpos, char(key), mCurrentFont);
         }
         //scrollBar.setValues(firstTpos, 0, 0, text.length()); TODO
     }
@@ -440,7 +440,6 @@ void Viewer::drawString(std::string const& s, int x, int y, QFont const& font)
 {
     QString qs(Helpers::ReplaceTabs(s).c_str());
     QString qfont(Parser::getFontAsString(font).c_str());
-
     QMetaObject::invokeMethod(mCanvas, "drawString",
                               Q_ARG(QVariant, qs),
                               Q_ARG(QVariant, x),
@@ -490,16 +489,14 @@ Line * Viewer::fill(int top, int bottom, int pos)
         }
 
         std::string str = buf.str();
-
-        // new
         int begin = pos - str.size();
         line->firstPiece = mText->split(begin)->getNext();
+        line->begin = begin;
 
         line->len = str.size();
-        //line->text = str;
         line->x = LEFT;
         line->y = y;
-        line->w = getLineWidth(line); //(m, line->text);
+        line->w = getLineWidth(line);
         line->h = m.height();
         line->base = y + m.ascent();
         y += line->h;
@@ -529,7 +526,6 @@ void Viewer::rebuildFrom(Position pos)
 
 void Viewer::update(UpdateEvent e)
 {
-    std::string b;
     QFontMetrics m(mCurrentFont);
     Position pos = mCaret;
 
@@ -542,9 +538,13 @@ void Viewer::update(UpdateEvent e)
             //if (pos.y + pos.line->h > getHeight() - BOTTOM)
             //    scrollBar.setValue(firstTpos + firstLine->len); TODO scrollbar
         } else {
-            //b = pos.line->text;
-            //b.insert(pos.off, e.text);
-            //pos.line->text = b; // TODO
+            if (pos.off == 0)
+            {
+                Piece * p = mText->split(pos.tpos)->getNext();
+                if (p == nullptr)
+                    p = mText->getFirst();
+                pos.line->firstPiece = p;
+            }
             pos.line->w += stringWidth(m, e.text);
             pos.line->len += e.text.length();
             mLastTpos += e.text.length();
@@ -553,7 +553,7 @@ void Viewer::update(UpdateEvent e)
         setCaret(newCarPos);
 
     }
-    else if (e.text == "") { // delete // TODO check nullptr
+    else if (e.text == "") { // delete
         if (!mCaret.valid || e.to != mCaret.tpos)
             pos = Pos(e.to);
         int d = e.to - e.from;
@@ -561,11 +561,19 @@ void Viewer::update(UpdateEvent e)
             rebuildFrom(Pos(e.from));
         }
         else { // delete within a line
-            //b = pos.line->text;
-            //b.delete(pos.off - d, pos.off); // TODO check
-            //b.erase(pos.off - d, d);
-            //pos.line->text = b; // TODO
-            pos.line->w = getLineWidth(pos.line); //stringWidth(m, pos.line->text); // TODO
+            if (pos.off == 1)
+            {
+                Piece * p = nullptr;
+                if (pos.tpos == mLastTpos)
+                {
+                    p = mText->split(pos.tpos - 1);
+
+                }
+                else
+                    p = mText->split(pos.tpos);
+                pos.line->firstPiece = p;
+            }
+            pos.line->w = getLineWidth(pos.line);
             pos.line->len -= d;
             mLastTpos -= d;
             repaint(pos.line->x, pos.line->y, getWidth(), pos.line->h+1);
@@ -584,7 +592,6 @@ void Viewer::paint()
 
     Line * line = mFirstLine;
     while (line != nullptr) {
-        //drawString(line->text, line->x, line->base, mCurrentFont); // REMOVE
         drawLine(line);
         line = line->next;
     }
@@ -598,6 +605,7 @@ void Viewer::paint()
 
 void Viewer::drawLine(Line * line)
 {
+    std::string debugtext = "";
     if (line == nullptr)
     {
         assert(false);
@@ -612,18 +620,20 @@ void Viewer::drawLine(Line * line)
     while (p != nullptr && count < line->len)
     {
         std::string text = p->getText();
-        count += text.size();
-        if (count > line->len)
-            break;
+        if (count + text.length() >= line->len)
+            text = text.substr(0, line->len-count);
+
+        count += text.length();
         drawString(text, x, y, p->getFont());
+        debugtext += text;
         x += stringWidth(QFontMetrics(p->getFont()), text);
         p = p->getNext();
     }
+    qDebug() << "Line: " << QString::fromStdString(debugtext);
 }
 
 int Viewer::getLineWidth(Line * line)
 {
-    /*
     if (line == nullptr)
     {
         assert(false);
@@ -636,13 +646,13 @@ int Viewer::getLineWidth(Line * line)
     while (p != nullptr && count < line->len)
     {
         std::string text = p->getText();
-        count += text.size();
-        if (count > line->len)
-            break;
-        width += this->stringWidth(QFontMetrics(p->getFont()), text);
+        if (count + text.length() >= line->len)
+            text = text.substr(0, line->len-count);
+
+        count += text.length();
+        width += stringWidth(QFontMetrics(p->getFont()), text);
         p = p->getNext();
     }
-    return width;*/
-    return 500;
+    return width;
 }
 
