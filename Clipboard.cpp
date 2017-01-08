@@ -41,7 +41,16 @@ void ClipBoard::cutToClipBoard(PieceListText * text, int from, int to)
 
 void ClipBoard::pasteFromClipBoard(PieceListText * text, int pos)
 {
+    if (mFirstPiece == nullptr)
+        return;
 
+    Piece * piece = mFirstPiece;
+    while(piece != nullptr)
+    {
+        text->insert(pos, piece->getText(), piece->getFont());
+        pos += piece->getLength();
+        piece = piece->getNext();
+    }
 }
 
 void ClipBoard::deleteClipBoard()

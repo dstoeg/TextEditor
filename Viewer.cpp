@@ -66,7 +66,10 @@ bool Viewer::OnSaveFile(QString file)
 
 void Viewer::OnCut()
 {
-    qDebug() << "cut";
+    int from = mSel.beg.tpos;
+    int to = mSel.end.tpos;
+    mClipBoard.cutToClipBoard(mText, from, to);
+    mSel.valid = false;
 }
 
 void Viewer::OnCopy()
@@ -74,12 +77,12 @@ void Viewer::OnCopy()
     int from = mSel.beg.tpos;
     int to = mSel.end.tpos;
     mClipBoard.copyToClipBoard(mText, from, to);
-    qDebug() << "copy";
 }
 
 void Viewer::OnPaste()
 {
-    qDebug() << "paste";
+    int pos = mCaret.tpos;
+    mClipBoard.pasteFromClipBoard(mText, pos);
 }
 
 void Viewer::OnFind(QString str)
