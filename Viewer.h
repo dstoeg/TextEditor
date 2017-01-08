@@ -125,6 +125,8 @@ private:
     // font metrics calculations
     //--------------------------------------------------------------------------
     int getLineWidth(Line * line);
+    int getLineHeight(Line * line);
+    int getLineAscent(Line * line);
 };
 
 #endif // VIEWER_H

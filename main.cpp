@@ -30,21 +30,3 @@ int main(int argc, char *argv[])
 
     return app.exec();
 }
-
-/* REFERENCE
-    QFont font;
-    bool bold = font.bold();
-    bool italic = font.italic();
-    bool underline = font.underline();
-
-    QFontMetrics fm(font);
-    int ascent  = fm.ascent();
-    int descent = fm.descent();
-    int height  = fm.height();
-    int lead    = fm.leading();
-    int width   = fm.width('c');
-    int swidth  = fm.width("hello");
-
-    QString fontFamily = font.family();
-    int size = font.pixelSize();
-*/

@@ -42,6 +42,7 @@ ToolBar {
                     ListElement { text: 30;}
                     ListElement { text: 40;}
                     ListElement { text: 50;}
+                    ListElement { text: 100;}
                 }
 
                 onCurrentIndexChanged: viewer.OnFontSizeChanged(currentText);

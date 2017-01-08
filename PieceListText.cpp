@@ -40,7 +40,7 @@ void PieceListText::insert(int pos, char c, QFont font)
 
     int last_index = p->getFilePos() + p->getLength();
     int scratchFileSize = Helpers::GetFileSize(mScratchFileName);
-	if (!(p->getFile() == cScratchFileName && last_index == scratchFileSize))
+    if (!(p->getFile() == cScratchFileName && last_index == scratchFileSize && p->getFont() == font))
 	{
         Piece * q = new Piece(mScratchFileName, 0, scratchFileSize, p->getNext(), font);
 		p->setNext(q);
@@ -120,6 +120,33 @@ char PieceListText::charAt(int pos)
     }
     //assert(false);
     return  '\0';
+}
+
+QFontMetrics PieceListText::metricsAt(int pos)
+{
+    if (pos >= mLength)
+        return QFontMetrics(QFont());
+
+    Piece * piece = mFirstPiece;
+
+    // skip dummy piece
+    if (piece->getNext() == nullptr)
+        return QFontMetrics(QFont());
+    piece = piece->getNext();
+
+    int count = 0;
+    while (piece != nullptr)
+    {
+        if (pos < count + piece->getLength())
+        {
+            // in this piece
+            return QFontMetrics(piece->getFont());
+        }
+        count += piece->getLength();
+        piece = piece->getNext();
+    }
+    //assert(false);
+    return  QFontMetrics(QFont());
 }
 
 Piece * PieceListText::getFirst() const

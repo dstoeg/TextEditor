@@ -312,16 +312,12 @@ void Viewer::OnKeyPressed(int key)
             if (mCaret.tpos == mLastTpos) return;
             pos++;
             ch = mText->charAt(pos);
-            /*if (ch == '\n')
-                pos++;*/
             setCaret(pos);
         }
         else if (key == Qt::Key_Left) {
             if (mCaret.tpos == 0) return;
             pos--;
             ch = mText->charAt(pos);
-            /*if (ch == '\n')
-                pos--;*/
             setCaret(pos);
         }
         else if (key == Qt::Key_Up) {

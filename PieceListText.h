@@ -4,6 +4,8 @@
 #include "Piece.h"
 #include "UpdateEvent.h"
 
+#include <QFontMetrics>
+
 #include <vector>
 
 class PieceListText
@@ -18,6 +20,7 @@ public:
     Piece * split(int pos);
     void delete_(int from, int to);
     char charAt(int pos);
+    QFontMetrics metricsAt(int pos);
 
     // load / store
     bool load(std::string const& file);
