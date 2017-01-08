@@ -1,14 +1,9 @@
-
 #include "Parser.h"
 #include "Helpers.h"
-
-#include <QDebug>
-
 #include <fstream>
 #include <cassert>
 #include <sstream>
 #include <iomanip>
-#include <iostream>
 
 char const EXISTS_HEADER = char(127);
 
@@ -106,7 +101,7 @@ bool Parser::writeFile(std::string const& file, Piece * first)
 	header << EXISTS_HEADER;
 
 	// write offset
-    int offset = header.str().size() + info.str().size() + cOFFSET_LEN;
+    int offset = int(header.str().size() + info.str().size() + cOFFSET_LEN);
 	header << std::setw(cOFFSET_LEN) << offset;
 
 	// put it all together
@@ -161,11 +156,11 @@ QFont Parser::parseFont(std::string const& font, std::string const& style)
 {
     QFont qFont;
 
-    int idx = font.find("px");
+    int idx = int(font.find("px"));
     int size = std::stoi(font.substr(0, idx));
     qFont.setPixelSize(size);
 
-    idx = font.find(' ') + 1;
+    idx = int(font.find(' ')) + 1;
     std::string family = font.substr(idx, font.size()-1);
     qFont.setFamily(QString::fromStdString(family));
 

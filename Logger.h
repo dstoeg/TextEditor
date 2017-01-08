@@ -4,7 +4,6 @@
 
 #include "PieceListText.h"
 
-
 class Logger
 {
 public:

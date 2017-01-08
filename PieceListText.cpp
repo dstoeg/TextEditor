@@ -1,19 +1,12 @@
-
 #include "PieceListText.h"
 #include "Helpers.h"
 #include "Parser.h"
-#include "Logger.h"
-
-#include <fstream>
-#include <iostream>
 #include <cassert>
 #include <sstream>
-#include <QDebug>
 #include <ctype.h>
 #include <cstdio>
 
 std::string const cScratchFileName = "scratch.txt";
-
 
 
 PieceListText::PieceListText()
@@ -121,7 +114,6 @@ char PieceListText::charAt(int pos)
         count += piece->getLength();
         piece = piece->getNext();
     }
-    //assert(false);
     return  '\0';
 }
 
@@ -148,7 +140,6 @@ QFontMetrics PieceListText::metricsAt(int pos)
         count += piece->getLength();
         piece = piece->getNext();
     }
-    //assert(false);
     return  QFontMetrics(QFont());
 }
 
@@ -204,7 +195,6 @@ void PieceListText::removeListener(UpdateEventListener * listener)
 
 void PieceListText::notify(UpdateEvent e)
 {
-    Logger::dumpText(*this);
     for (UpdateEventListener * listener : mListeners)
         listener->update(e);
 }

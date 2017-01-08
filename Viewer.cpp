@@ -2,20 +2,34 @@
 #include "Logger.h"
 #include "Parser.h"
 #include "Helpers.h"
-#include <iostream>
 #include <sstream>
 #include <cassert>
 #include <algorithm>
 #include <QVariant>
-#include <QDebug>
 #include <QFontMetrics>
 #include <QQmlProperty>
 
 Viewer::Viewer(QObject * canvas) : QObject(0)
 {
     mText = nullptr;
-
     mCanvas = canvas;
+    mCaret.valid = false;
+    mFirstLine = nullptr;
+    mFirstTpos = 0;
+    mLastTpos = 0;
+    mLastPos.valid = false;
+
+    // default font Calibri 30px
+    mCurrentFont.setFamily("Calibri");
+    mCurrentFont.setPixelSize(30);
+    mCurrentFont.setBold(false);
+    mCurrentFont.setItalic(false);
+    mCurrentFont.setUnderline(false);
+}
+
+void Viewer::reset()
+{
+    mText = nullptr;
     mCaret.valid = false;
     mFirstLine = nullptr;
     mFirstTpos = 0;
@@ -36,6 +50,7 @@ Viewer::Viewer(QObject * canvas) : QObject(0)
 
 bool Viewer::OnLoadFile(QString str)
 {
+    reset();
     mText = new PieceListText();
     mText->addListener(this);
     std::string fileName = str.toStdString();
@@ -51,7 +66,7 @@ bool Viewer::OnLoadFile(QString str)
                 p = p->getNext();
             }
         }
-        QMetaObject::invokeMethod(mCanvas, "requestPaint");
+        repaint(0,0,getWidth(), getHeight());
         return true;
     }
     return false;
@@ -176,7 +191,7 @@ Position Viewer::Pos(int x, int y)
         pos.x = line->x + line->w;
         pos.off = line->len;
         if (pos.org + line->len < mText->getLength())
-            pos.off -= 1; // CHECK ??? 2
+            pos.off -= 1;
     }
     else {
         pos.x = line->x;
@@ -353,7 +368,7 @@ void Viewer::OnKeyPressed(int key)
     }
 }
 
-void Viewer::OnKeyTyped(int key)
+void Viewer::OnKeyTyped(int key, bool upper)
 {
     if (mText == nullptr)
         return;
@@ -367,8 +382,7 @@ void Viewer::OnKeyTyped(int key)
     if (mCaret.valid) {
         if (key == Qt::Key_Backspace) {
             if (mCaret.tpos > 0 && !selection) {
-                int d = 1; //2; //mCaret.off == 0 ? 2 : 1; // CHANGED
-                mText->delete_(mCaret.tpos - d, mCaret.tpos);
+                mText->delete_(mCaret.tpos - 1, mCaret.tpos);
             }
         }
         else if (key == Qt::Key_Escape) {
@@ -378,7 +392,9 @@ void Viewer::OnKeyTyped(int key)
             mText->insert(mCaret.tpos, CRLF_, mCurrentFont);
         }
         else {
-            mText->insert(mCaret.tpos, char(key), mCurrentFont);
+            char c = char(key);
+            c = (upper) ? toupper(c) : tolower(c);
+            mText->insert(mCaret.tpos, c, mCurrentFont);
         }
         //scrollBar.setValues(firstTpos, 0, 0, text.length());
     }
@@ -532,8 +548,6 @@ Line * Viewer::fill(int top, int bottom, int pos)
         std::string str = buf.str();
         int begin = pos - int(str.size());
         line->firstPiece = mText->split(begin)->getNext();
-        line->begin = begin;
-
         line->len = int(str.size());
         line->x = LEFT;
         line->y = y;

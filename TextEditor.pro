@@ -11,7 +11,6 @@ SOURCES += main.cpp \
     PieceListText.cpp \
     Viewer.cpp \
     UpdateEvent.cpp \
-    line.cpp \
     Clipboard.cpp
 
 RESOURCES += qml.qrc

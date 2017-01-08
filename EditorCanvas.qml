@@ -3,6 +3,7 @@ import QtQuick.Controls 1.3
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.2
+import QtQuick.Controls 2.0
 
 Canvas {
 
@@ -34,14 +35,21 @@ Canvas {
         }
     }
 
+    property bool upper: false;
+
     Keys.onPressed:
     {
         focus: true;
-        if (event.key === Qt.Key_Left || event.key === Qt.Key_Right ||
+        if (event.key === Qt.Key_Shift)
+            upper = true;
+        else if (event.key === Qt.Key_Left || event.key === Qt.Key_Right ||
                 event.key === Qt.Key_Up || event.key === Qt.Key_Down)
             viewer.OnKeyPressed(event.key);
         else
-            viewer.OnKeyTyped(event.key);
+        {
+            viewer.OnKeyTyped(event.key,upper)
+        }
+        upper = false;
         event.accepted = true;
     }
 
@@ -91,8 +99,6 @@ Canvas {
 
     onPaint: {
         viewer.paint();
-        //console.log("paint called")
     }
-
-
 }
+

@@ -13,8 +13,6 @@ public:
 
 private:
     Piece * mFirstPiece;
-    bool mContainsText;
-
     void deleteClipBoard();
     void adjustValues(int & from, int & to);
 };

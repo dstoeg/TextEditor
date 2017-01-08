@@ -1,21 +1,14 @@
 #include "Helpers.h"
-
 #include <fstream>
-#include <iostream>
 
 
 int Helpers::GetFileSize(std::string const& file)
 {
     std::ifstream t(file);
     std::string str((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
-    int size = str.size();
+    int size = int(str.size());
     t.close();
     return size;
-    /*
-    std::ifstream in(file, std::ifstream::ate | std::ifstream::binary);
-    int size = (in.is_open()) ? int(in.tellg()) : 0;
-    in.close();
-    return int(fsize);*/
 }
 
 std::string Helpers::ReplaceTabs(std::string const& text)

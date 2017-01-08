@@ -16,6 +16,7 @@ class Viewer : public QObject, public UpdateEventListener
 
 public:
     explicit Viewer(QObject * canvas = 0);
+    void reset();
 
     //--------------------------------------------------------------------------
     // GUI handling
@@ -30,8 +31,6 @@ public:
     Q_INVOKABLE void OnFontSizeChanged(int size);
     Q_INVOKABLE void OnFontStyleChanged(bool bold, bool italic, bool underlined);
 
-
-
     //--------------------------------------------------------------------------
     // mouse handling
     //--------------------------------------------------------------------------
@@ -45,7 +44,7 @@ public:
     // key handling
     //--------------------------------------------------------------------------
     Q_INVOKABLE void OnKeyPressed(int key);
-    Q_INVOKABLE void OnKeyTyped(int key);
+    Q_INVOKABLE void OnKeyTyped(int key, bool upper);
 
 
     //--------------------------------------------------------------------------
@@ -106,12 +105,12 @@ private:
     QObject * mCanvas;
     QFont mCurrentFont;
     PieceListText * mText;
-    Line * mFirstLine;       // the lines in this viewer
-    int mFirstTpos;       // first text position in this viewer
-    int mLastTpos;        // last text position in this viewer
+    Line * mFirstLine;
+    int mFirstTpos;
+    int mLastTpos;
     Selection mSel;
     Position mCaret;
-    Position mLastPos;     // last mouse position: used during mouse dragging
+    Position mLastPos;
     ClipBoard mClipBoard;
 
 
@@ -122,8 +121,7 @@ private:
     const int        BOTTOM = 10; // bottom margin
     const int        LEFT = 10;   // left margin
     const char       EOF_ = '\0';
-    //const std::string   CRLF_ = "\r\n";
-    const char CRLF_ = '\n';
+    const char       CRLF_ = '\n';
 
 
     //--------------------------------------------------------------------------

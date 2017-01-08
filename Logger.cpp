@@ -1,7 +1,4 @@
-
 #include "Logger.h"
-
-#include <iostream>
 #include <sstream>
 #include <QDebug>
 

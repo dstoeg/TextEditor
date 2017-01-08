@@ -1,7 +1,5 @@
 #include "Piece.h"
 #include "Helpers.h"
-
-#include <iostream>
 #include <fstream>
 #include <sstream>
 #include <cassert>
@@ -66,14 +64,6 @@ std::string Piece::getText()
         return "";
     }
 
-    // read pos -> length
-    /*
-    mFileStream.seekg(mFilePos);
-    text.resize(mLength);
-    mFileStream.read(&text[0], mLength);
-    */
-
-    // code above temporatily replaced by following HACK
     std::ifstream t(mFileName);
     std::string str((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
     t.close();

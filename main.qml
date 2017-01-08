@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.2
 
 
+
 ApplicationWindow {
     title: qsTr("Text Editor")
     width: 1000
@@ -12,8 +13,6 @@ ApplicationWindow {
     visible: true
     minimumWidth: 1000;
     maximumWidth: 1000;
-    //minimumHeight: 1200;
-    //maximumHeight: 1200;
 
     menuBar : EditorMenubar { }
 
@@ -24,8 +23,11 @@ ApplicationWindow {
         anchors.fill: parent
         color: "white"
         objectName: "rect"
-
         EditorCanvas { }
+
+        //contentHeight: parent.height * 2
+        //ScrollBar.vertical: ScrollBar { id: scrollBar }
+
     }
 
     property bool isloadAction : true;

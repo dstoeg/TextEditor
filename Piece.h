@@ -14,18 +14,13 @@ public:
 
     void setNext(Piece * next);
     Piece * getNext() const;
-
     std::string getText();
-
     int getLength() const;
     void setLength(int length);
-	
 	std::string getFile() const;
     int getFilePos() const;
-
     QFont getFont() const;
     void setFont(QFont const& font);
-
     Piece * getDeepCopy();
 
 private:

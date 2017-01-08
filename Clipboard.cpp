@@ -1,12 +1,9 @@
 #include "Clipboard.h"
-#include "Logger.h"
-
 #include <algorithm>
 
 ClipBoard::ClipBoard()
 {
     mFirstPiece = nullptr;
-    mContainsText = false;
 }
 
 void ClipBoard::copyToClipBoard(PieceListText * text, int from, int to)
@@ -27,10 +24,6 @@ void ClipBoard::copyToClipBoard(PieceListText * text, int from, int to)
         copy = copy->getNext();
     }
     copy->setNext(nullptr);
-
-    Logger::debugPrint("clipboard");
-    Logger::dumpText(mFirstPiece);
-    Logger::dumpText(*text);
 }
 
 void ClipBoard::cutToClipBoard(PieceListText * text, int from, int to)
@@ -55,9 +48,16 @@ void ClipBoard::pasteFromClipBoard(PieceListText * text, int pos)
 
 void ClipBoard::deleteClipBoard()
 {
-    // todo
+    Piece * p = mFirstPiece;
+    Piece * tmp = nullptr;
+    while (p != nullptr)
+    {
+        tmp = p;
+        p = p->getNext();
+        delete tmp; tmp = nullptr;
+
+    }
     mFirstPiece = nullptr;
-    mContainsText = false;
 }
 
 void ClipBoard::adjustValues(int & from, int & to)
