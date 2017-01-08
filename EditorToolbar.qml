@@ -109,10 +109,13 @@ ToolBar {
 
             TextField {
                 onTextChanged: parent.text = text;
+                id : textfield;
             }
             ToolButton {
                 text: "Find"
-                onClicked: viewer.OnFind(parent.text);
+                onClicked: {
+                    viewer.OnFind(parent.text);
+                }
             }
         }
     }

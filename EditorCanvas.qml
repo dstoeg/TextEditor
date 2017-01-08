@@ -7,6 +7,7 @@ import QtQuick.Controls.Styles 1.2
 Canvas {
 
     focus: true
+    id : editorCanvs
     objectName: "canvas"
     anchors.fill: parent
     antialiasing: false
@@ -17,6 +18,7 @@ Canvas {
         onPressed: {
             viewer.OnMouseClicked(mouseX, mouseY);
             mouse.accepted = true;
+            editorCanvs.forceActiveFocus();
         }
         onPositionChanged: {
             if (pressedButtons & Qt.LeftButton)
@@ -34,6 +36,7 @@ Canvas {
 
     Keys.onPressed:
     {
+        focus: true;
         if (event.key === Qt.Key_Left || event.key === Qt.Key_Right ||
                 event.key === Qt.Key_Up || event.key === Qt.Key_Down)
             viewer.OnKeyPressed(event.key);

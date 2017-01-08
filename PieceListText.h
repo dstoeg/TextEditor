@@ -40,15 +40,18 @@ public:
     void removeListener(UpdateEventListener * listener);
 
 private:
+    // members
     int mLength;
     Piece * mFirstPiece;
     std::string mScratchFileName;
 	std::fstream mScratchFileStream;
 	std::string mFileName;
 
+    // helpers
+    std::string getFileContent();
+
     typedef std::vector<UpdateEventListener*> TListeners;
     typedef std::vector<UpdateEventListener*>::iterator TListenersIter;
-
     TListeners mListeners;
     void notify(UpdateEvent e);
 };

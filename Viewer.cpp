@@ -88,7 +88,11 @@ void Viewer::OnFind(QString str)
 {
     int tpos = mText->find(str.toStdString());
     if (tpos >= mFirstTpos && tpos < mLastTpos)
+    {
         setSelection(tpos, tpos+str.length());
+        repaint(0, 0, getWidth(), getHeight());
+    }
+
 }
 
 void Viewer::OnFontChanged(QString font)
