@@ -24,7 +24,7 @@ public:
 
     // load / store
     bool load(std::string const& file);
-	bool save();
+    bool save(std::string const& file);
 
 	Piece * getFirst() const;
     int getLength() const;

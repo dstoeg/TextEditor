@@ -182,9 +182,9 @@ bool PieceListText::load(std::string const& file)
 	}
 }
 
-bool PieceListText::save()
+bool PieceListText::save(std::string const& file)
 {
-	return Parser::writeFile(mFileName, mFirstPiece);
+    return Parser::writeFile(file, mFirstPiece);
 }
 
 void PieceListText::addListener(UpdateEventListener * listener)

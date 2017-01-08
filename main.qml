@@ -28,13 +28,35 @@ ApplicationWindow {
         EditorCanvas { }
     }
 
+    property bool isloadAction : true;
+
     FileDialog {
         id: fileDialog
         title: "Please choose a file"
         folder: shortcuts.home
         visible: false
+        selectMultiple: false
+
+
         onAccepted: {
-            viewer.OnLoadFile(fileDialog.fileUrl);
+            if (isloadAction)
+                viewer.OnLoadFile(fileDialog.fileUrl);
+            else
+                viewer.OnSaveFile(fileDialog.fileUrl);
+        }
+
+        function openFile()
+        {
+            fileDialog.selectExisting = true;
+            isloadAction = true;
+            fileDialog.open();
+        }
+
+        function saveFile()
+        {
+            fileDialog.selectExisting = false;
+            isloadAction = false;
+            fileDialog.open();
         }
     }
 }

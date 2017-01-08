@@ -59,7 +59,9 @@ bool Viewer::OnLoadFile(QString str)
 
 bool Viewer::OnSaveFile(QString file)
 {
-    return mText->save();
+    std::string fileName = file.toStdString();
+    fileName = fileName.substr(8);
+    return mText->save(fileName);
 }
 
 void Viewer::OnCut()

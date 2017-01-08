@@ -73,6 +73,12 @@ Piece * Parser::parseFile(std::string const& file, int & length)
 
 bool Parser::writeFile(std::string const& file, Piece * first)
 {
+    // check if file can be openend
+    std::ofstream out;
+    out.open(file, std::ofstream::out | std::ofstream::trunc);
+    if (!out.is_open())
+        return false;
+
 	std::stringstream text;
 	std::stringstream info;
 	std::stringstream header;
@@ -106,8 +112,6 @@ bool Parser::writeFile(std::string const& file, Piece * first)
 	// put it all together
 	output = header.str() + info.str() + text.str();
 
-	std::ofstream out;
-	out.open(file, std::ofstream::out | std::ofstream::trunc);
 	out << output;
 	out.close();
 

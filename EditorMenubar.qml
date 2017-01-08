@@ -10,16 +10,18 @@ MenuBar {
     Menu {
         title: qsTr("File")
         MenuItem {
+            id: openAction;
             text: qsTr("Open")
             onTriggered: {
-                fileDialog.open();
+                fileDialog.openFile();
             }
 
         }
         MenuItem {
+            id: saveAction;
             text: qsTr("Save")
             onTriggered: {
-                viewer.OnSaveFile("C:/Users/dstoeg/JKU/SystemSoftware/editor/test2.txt");
+                fileDialog.saveFile();
             }
         }
         MenuItem {
