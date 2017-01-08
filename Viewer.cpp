@@ -69,7 +69,6 @@ void Viewer::OnCut()
     int from = mSel.beg.tpos;
     int to = mSel.end.tpos;
     mClipBoard.cutToClipBoard(mText, from, to);
-    mSel.valid = false;
 }
 
 void Viewer::OnCopy()
@@ -87,7 +86,9 @@ void Viewer::OnPaste()
 
 void Viewer::OnFind(QString str)
 {
-    qDebug() << "find: " << str;
+    int tpos = mText->find(str.toStdString());
+    if (tpos >= mFirstTpos && tpos < mLastTpos)
+        setSelection(tpos, tpos+str.length());
 }
 
 void Viewer::OnFontChanged(QString font)
@@ -138,7 +139,6 @@ void Viewer::invertSelectionOnCanvas(int x, int y, int width, int height)
                               Q_ARG(QVariant, width),
                               Q_ARG(QVariant, height));
 }
-
 
 //--------------------------------------------------------------------------
 // position handling
@@ -441,6 +441,19 @@ void Viewer::OnMouseReleased()
         setCaret(mSel.beg);
     mLastPos.valid = false;
     repaint(0, 0, getWidth(), getHeight());
+}
+
+void Viewer::OnDoubleClick(int x, int y)
+{
+    if (mText == nullptr)
+        return;
+
+    Position pos = Pos(x, y);
+    if (pos.tpos >= mLastTpos)
+        return;
+
+    Word word = mText->wordAt(pos.tpos);
+    setSelection(word.tpos,word.tpos+word.len);
 }
 
 //--------------------------------------------------------------------------

@@ -37,7 +37,9 @@ public:
     //--------------------------------------------------------------------------
     Q_INVOKABLE void OnMouseClicked(int x, int y);
     Q_INVOKABLE void OnMouseDragged(int x, int y);
+    Q_INVOKABLE void OnDoubleClick(int x, int y);
     Q_INVOKABLE void OnMouseReleased();
+
 
     //--------------------------------------------------------------------------
     // key handling

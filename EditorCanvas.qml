@@ -26,6 +26,10 @@ Canvas {
             viewer.OnMouseReleased();
             mouse.accepted = true;
         }
+        onDoubleClicked: {
+            viewer.OnDoubleClick(mouseX, mouseY);
+            mouse.accepted = true;
+        }
     }
 
     Keys.onPressed:

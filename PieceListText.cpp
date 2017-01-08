@@ -9,6 +9,8 @@
 #include <cassert>
 #include <sstream>
 #include <QDebug>
+#include <ctype.h>
+#include <cstdio>
 
 std::string const cScratchFileName = "scratch.txt";
 
@@ -206,4 +208,42 @@ void PieceListText::notify(UpdateEvent e)
     for (UpdateEventListener * listener : mListeners)
         listener->update(e);
 }
+
+ Word PieceListText::wordAt(int tpos)
+ {
+     Word word;
+     int len = 0;
+     int it = tpos;
+
+     // check to the left
+     char c = charAt(it);
+     while (!isspace(c) && it > 0)
+     {
+         it--;
+         len++;
+         c = charAt(it);
+     }
+
+     word.tpos = (it != 0) ? it+1 : 0;
+
+     // now to the right
+     it = tpos+1;
+     c = charAt(it);
+     while (!isspace(c) && it < mLength-1)
+     {
+         it++;
+         len++;
+         c = charAt(it);
+     }
+     word.len = len + 1;
+
+     return word;
+ }
+
+ int PieceListText::find(std::string const& word)
+ {
+     // TODO
+
+     return 0;
+ }
 

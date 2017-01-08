@@ -3,10 +3,13 @@
 
 #include "Piece.h"
 #include "UpdateEvent.h"
-
 #include <QFontMetrics>
-
 #include <vector>
+
+struct Word {
+    int tpos;
+    int len;
+};
 
 class PieceListText
 {
@@ -21,13 +24,16 @@ public:
     void delete_(int from, int to);
     char charAt(int pos);
     QFontMetrics metricsAt(int pos);
+    Piece * getFirst() const;
+    int getLength() const;
 
     // load / store
     bool load(std::string const& file);
     bool save(std::string const& file);
 
-	Piece * getFirst() const;
-    int getLength() const;
+    // find / select
+    Word wordAt(int tpos);
+    int find(std::string const& word);
 
     // listeners
     void addListener(UpdateEventListener * listener);
