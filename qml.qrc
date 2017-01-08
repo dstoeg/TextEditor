@@ -2,7 +2,8 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>EditorToolbar.qml</file>
-		<file>EditorMenubar.qml</file>
-		<file>EditorCanvas.qml</file>
+        <file>EditorMenubar.qml</file>
+        <file>EditorCanvas.qml</file>
+        <file>EditorFileDialog.qml</file>
     </qresource>
 </RCC>

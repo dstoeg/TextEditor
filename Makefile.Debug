@@ -177,6 +177,7 @@ debug\qrc_qml.cpp: qml.qrc \
 		D:\Qt\5.7\msvc2015_64\bin\rcc.exe \
 		EditorMenubar.qml \
 		EditorCanvas.qml \
+		EditorFileDialog.qml \
 		EditorToolbar.qml \
 		main.qml
 	D:\Qt\5.7\msvc2015_64\bin\rcc.exe -name qml qml.qrc -o debug\qrc_qml.cpp
@@ -242,6 +243,12 @@ debug\moc_Viewer.cpp: PieceListText.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qcontainerfwd.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qobject_impl.h \
 		UpdateEvent.h \
+		D:\Qt\5.7\msvc2015_64\include\QtGui\QFontMetrics \
+		D:\Qt\5.7\msvc2015_64\include\QtGui\qfontmetrics.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qrect.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qmargins.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qsize.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qpoint.h \
 		Selection.h \
 		Position.h \
 		Line.h \
@@ -250,10 +257,6 @@ debug\moc_Viewer.cpp: PieceListText.h \
 		D:\Qt\5.7\msvc2015_64\include\QtGui\QKeyEvent \
 		D:\Qt\5.7\msvc2015_64\include\QtGui\qevent.h \
 		D:\Qt\5.7\msvc2015_64\include\QtGui\qregion.h \
-		D:\Qt\5.7\msvc2015_64\include\QtCore\qrect.h \
-		D:\Qt\5.7\msvc2015_64\include\QtCore\qmargins.h \
-		D:\Qt\5.7\msvc2015_64\include\QtCore\qsize.h \
-		D:\Qt\5.7\msvc2015_64\include\QtCore\qpoint.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qdatastream.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qiodevice.h \
 		D:\Qt\5.7\msvc2015_64\include\QtGui\qkeysequence.h \
@@ -384,6 +387,10 @@ debug\main.obj: main.cpp D:\Qt\5.7\msvc2015_64\include\QtGui\QGuiApplication \
 		D:\Qt\5.7\msvc2015_64\include\QtGui\QFont \
 		D:\Qt\5.7\msvc2015_64\include\QtGui\qfont.h \
 		UpdateEvent.h \
+		D:\Qt\5.7\msvc2015_64\include\QtGui\QFontMetrics \
+		D:\Qt\5.7\msvc2015_64\include\QtGui\qfontmetrics.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qrect.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qmargins.h \
 		Viewer.h \
 		Selection.h \
 		Position.h \
@@ -393,8 +400,6 @@ debug\main.obj: main.cpp D:\Qt\5.7\msvc2015_64\include\QtGui\QGuiApplication \
 		D:\Qt\5.7\msvc2015_64\include\QtGui\QKeyEvent \
 		D:\Qt\5.7\msvc2015_64\include\QtGui\qevent.h \
 		D:\Qt\5.7\msvc2015_64\include\QtGui\qregion.h \
-		D:\Qt\5.7\msvc2015_64\include\QtCore\qrect.h \
-		D:\Qt\5.7\msvc2015_64\include\QtCore\qmargins.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qdatastream.h \
 		D:\Qt\5.7\msvc2015_64\include\QtGui\qkeysequence.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qfile.h \
@@ -463,6 +468,12 @@ debug\Logger.obj: Logger.cpp Logger.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qcontainerfwd.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qobject_impl.h \
 		UpdateEvent.h \
+		D:\Qt\5.7\msvc2015_64\include\QtGui\QFontMetrics \
+		D:\Qt\5.7\msvc2015_64\include\QtGui\qfontmetrics.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qrect.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qmargins.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qsize.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qpoint.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\QDebug \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qdebug.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qmap.h \
@@ -471,7 +482,6 @@ debug\Logger.obj: Logger.cpp Logger.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qlocale.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qvariant.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qvector.h \
-		D:\Qt\5.7\msvc2015_64\include\QtCore\qpoint.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qset.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qcontiguouscache.h
 
@@ -661,6 +671,12 @@ debug\PieceListText.obj: PieceListText.cpp PieceListText.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qcontainerfwd.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qobject_impl.h \
 		UpdateEvent.h \
+		D:\Qt\5.7\msvc2015_64\include\QtGui\QFontMetrics \
+		D:\Qt\5.7\msvc2015_64\include\QtGui\qfontmetrics.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qrect.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qmargins.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qsize.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qpoint.h \
 		Helpers.h \
 		Parser.h \
 		Logger.h \
@@ -672,7 +688,6 @@ debug\PieceListText.obj: PieceListText.cpp PieceListText.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qlocale.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qvariant.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qvector.h \
-		D:\Qt\5.7\msvc2015_64\include\QtCore\qpoint.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qset.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qcontiguouscache.h
 
@@ -735,6 +750,12 @@ debug\Viewer.obj: Viewer.cpp Viewer.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qcontainerfwd.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qobject_impl.h \
 		UpdateEvent.h \
+		D:\Qt\5.7\msvc2015_64\include\QtGui\QFontMetrics \
+		D:\Qt\5.7\msvc2015_64\include\QtGui\qfontmetrics.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qrect.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qmargins.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qsize.h \
+		D:\Qt\5.7\msvc2015_64\include\QtCore\qpoint.h \
 		Selection.h \
 		Position.h \
 		Line.h \
@@ -743,10 +764,6 @@ debug\Viewer.obj: Viewer.cpp Viewer.h \
 		D:\Qt\5.7\msvc2015_64\include\QtGui\QKeyEvent \
 		D:\Qt\5.7\msvc2015_64\include\QtGui\qevent.h \
 		D:\Qt\5.7\msvc2015_64\include\QtGui\qregion.h \
-		D:\Qt\5.7\msvc2015_64\include\QtCore\qrect.h \
-		D:\Qt\5.7\msvc2015_64\include\QtCore\qmargins.h \
-		D:\Qt\5.7\msvc2015_64\include\QtCore\qsize.h \
-		D:\Qt\5.7\msvc2015_64\include\QtCore\qpoint.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qdatastream.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\qiodevice.h \
 		D:\Qt\5.7\msvc2015_64\include\QtGui\qkeysequence.h \
@@ -769,8 +786,6 @@ debug\Viewer.obj: Viewer.cpp Viewer.h \
 		Helpers.h \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\QVariant \
 		D:\Qt\5.7\msvc2015_64\include\QtCore\QDebug \
-		D:\Qt\5.7\msvc2015_64\include\QtGui\QFontMetrics \
-		D:\Qt\5.7\msvc2015_64\include\QtGui\qfontmetrics.h \
 		D:\Qt\5.7\msvc2015_64\include\QtQml\QQmlProperty \
 		D:\Qt\5.7\msvc2015_64\include\QtQml\qqmlproperty.h \
 		D:\Qt\5.7\msvc2015_64\include\QtQml\qtqmlglobal.h \

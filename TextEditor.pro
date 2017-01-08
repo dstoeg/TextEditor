@@ -51,4 +51,5 @@ HEADERS += \
 
 DISTFILES += \
     EditorToolBar.qml \
-    EditorMenubar.qml
+    EditorMenubar.qml \
+    EditorFileDialog.qml

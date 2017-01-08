@@ -27,5 +27,17 @@ ApplicationWindow {
 
         EditorCanvas { }
     }
+
+    FileDialog {
+        id: fileDialog
+        title: "Please choose a file"
+        folder: shortcuts.home
+        visible: false
+        onAccepted: {
+            console.log("You chose: " + fileDialog.fileUrls)
+            viewer.OnLoadFile("C:/Users/dstoeg/JKU/SystemSoftware/editor/test.txt");
+        }
+
+    }
 }
 

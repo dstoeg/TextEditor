@@ -11,10 +11,10 @@
 #include <QFontMetrics>
 #include <QQmlProperty>
 
-Viewer::Viewer(PieceListText * text, QObject * canvas) : QObject(0)
+Viewer::Viewer(QObject * canvas) : QObject(0)
 {
-    mText = text;
-    mText->addListener(this);
+    mText = nullptr;
+
     mCanvas = canvas;
     mCaret.valid = false;
     mFirstLine = nullptr;
@@ -36,6 +36,8 @@ Viewer::Viewer(PieceListText * text, QObject * canvas) : QObject(0)
 
 bool Viewer::OnLoadFile(QString str)
 {
+    mText = new PieceListText();
+    mText->addListener(this);
     if (mText->load(str.toStdString()))
     {
         if (!Parser::fileHasHeader(str.toStdString()))
@@ -47,6 +49,7 @@ bool Viewer::OnLoadFile(QString str)
                 p = p->getNext();
             }
         }
+        QMetaObject::invokeMethod(mCanvas, "requestPaint");
         return true;
     }
     return false;
@@ -305,6 +308,9 @@ void Viewer::removeSelection()
 
 void Viewer::OnKeyPressed(int key)
 {
+    if (mText == nullptr)
+        return;
+
     if (mCaret.valid) {
         int pos = mCaret.tpos;
         char ch;
@@ -312,16 +318,12 @@ void Viewer::OnKeyPressed(int key)
             if (mCaret.tpos == mLastTpos) return;
             pos++;
             ch = mText->charAt(pos);
-            /*if (ch == '\n')
-                pos++;*/
             setCaret(pos);
         }
         else if (key == Qt::Key_Left) {
             if (mCaret.tpos == 0) return;
             pos--;
             ch = mText->charAt(pos);
-            /*if (ch == '\n')
-                pos--;*/
             setCaret(pos);
         }
         else if (key == Qt::Key_Up) {
@@ -339,6 +341,9 @@ void Viewer::OnKeyPressed(int key)
 
 void Viewer::OnKeyTyped(int key)
 {
+    if (mText == nullptr)
+        return;
+
     bool selection = mSel.valid;
 
     if (selection) {
@@ -372,6 +377,9 @@ void Viewer::OnKeyTyped(int key)
 
 void Viewer::OnMouseClicked(int x, int y)
 {
+    if (mText == nullptr)
+        return;
+
     removeCaret();
     removeSelection();
     Position pos = Pos(x, y);
@@ -382,6 +390,9 @@ void Viewer::OnMouseClicked(int x, int y)
 
 void Viewer::OnMouseDragged(int x, int y)
 {
+    if (mText == nullptr)
+        return;
+
     if (mSel.valid == false)
         return;
 
@@ -412,6 +423,9 @@ void Viewer::OnMouseDragged(int x, int y)
 
 void Viewer::OnMouseReleased()
 {
+    if (mText == nullptr)
+        return;
+
     if (mSel.beg.tpos == mSel.end.tpos)
         setCaret(mSel.beg);
     mLastPos.valid = false;
@@ -585,6 +599,10 @@ void Viewer::update(UpdateEvent e)
 
 void Viewer::paint()
 {
+    // no file loaded
+    if (mText == nullptr)
+        return;
+
     if (mFirstLine == nullptr) {
         mFirstLine = fill(TOP, getHeight() - BOTTOM, 0);
         mCaret = Pos(0);

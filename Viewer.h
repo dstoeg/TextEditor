@@ -14,7 +14,7 @@ class Viewer : public QObject, public UpdateEventListener
     Q_OBJECT
 
 public:
-    explicit Viewer(PieceListText * text = 0, QObject * canvas = 0);
+    explicit Viewer(QObject * canvas = 0);
 
     //--------------------------------------------------------------------------
     // GUI handling
