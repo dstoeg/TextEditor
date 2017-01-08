@@ -177,7 +177,6 @@ debug\qrc_qml.cpp: qml.qrc \
 		D:\Qt\5.7\msvc2015_64\bin\rcc.exe \
 		EditorMenubar.qml \
 		EditorCanvas.qml \
-		EditorFileDialog.qml \
 		EditorToolbar.qml \
 		main.qml
 	D:\Qt\5.7\msvc2015_64\bin\rcc.exe -name qml qml.qrc -o debug\qrc_qml.cpp

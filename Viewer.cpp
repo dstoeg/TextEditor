@@ -38,9 +38,11 @@ bool Viewer::OnLoadFile(QString str)
 {
     mText = new PieceListText();
     mText->addListener(this);
-    if (mText->load(str.toStdString()))
+    std::string fileName = str.toStdString();
+    fileName = fileName.substr(8);
+    if (mText->load(fileName))
     {
-        if (!Parser::fileHasHeader(str.toStdString()))
+        if (!Parser::fileHasHeader(fileName))
         {
             Piece * p = mText->getFirst();
             while (p != nullptr)
