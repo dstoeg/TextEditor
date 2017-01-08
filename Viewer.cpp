@@ -71,6 +71,9 @@ void Viewer::OnCut()
 
 void Viewer::OnCopy()
 {
+    int from = mSel.beg.tpos;
+    int to = mSel.end.tpos;
+    mClipBoard.copyToClipBoard(mText, from, to);
     qDebug() << "copy";
 }
 
@@ -369,7 +372,6 @@ void Viewer::OnKeyTyped(int key)
         }
         else {
             mText->insert(mCaret.tpos, char(key), mCurrentFont);
-            qDebug() << mCurrentFont;
         }
         //scrollBar.setValues(firstTpos, 0, 0, text.length());
     }
@@ -390,6 +392,7 @@ void Viewer::OnMouseClicked(int x, int y)
     mSel = Selection(pos, pos);
     mLastPos = pos;
     mLastPos.valid = true;
+
 }
 
 void Viewer::OnMouseDragged(int x, int y)
@@ -423,6 +426,7 @@ void Viewer::OnMouseDragged(int x, int y)
         mSel.beg = pos;
     }
     mLastPos = pos;
+    repaint(0, 0, getWidth(), getHeight());
 }
 
 void Viewer::OnMouseReleased()
@@ -433,6 +437,7 @@ void Viewer::OnMouseReleased()
     if (mSel.beg.tpos == mSel.end.tpos)
         setCaret(mSel.beg);
     mLastPos.valid = false;
+    repaint(0, 0, getWidth(), getHeight());
 }
 
 //--------------------------------------------------------------------------

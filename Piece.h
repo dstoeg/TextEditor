@@ -26,6 +26,8 @@ public:
     QFont getFont() const;
     void setFont(QFont const& font);
 
+    Piece * getDeepCopy();
+
 private:
     int mLength;
     std::string mFileName;

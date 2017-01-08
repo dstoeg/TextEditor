@@ -91,6 +91,7 @@ void PieceListText::delete_(int from, int to)
 	Piece * a = split(from);
 	Piece * b = split(to);
 	a->setNext(b->getNext());
+    delete b; b = nullptr;
     notify(UpdateEvent(from, to, ""));
 }
 

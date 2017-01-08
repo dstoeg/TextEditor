@@ -11,7 +11,8 @@ SOURCES += main.cpp \
     PieceListText.cpp \
     Viewer.cpp \
     UpdateEvent.cpp \
-    line.cpp
+    line.cpp \
+    Clipboard.cpp
 
 RESOURCES += qml.qrc
 
@@ -47,7 +48,8 @@ HEADERS += \
     UpdateEvent.h \
     Line.h \
     Position.h \
-    Selection.h
+    Selection.h \
+    Clipboard.h
 
 DISTFILES += \
     EditorToolBar.qml \

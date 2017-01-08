@@ -10,6 +10,7 @@ class Logger
 public:
 	static void dumpText(PieceListText & text);
 	static void dumpTextList(PieceListText & text);
+    static void dumpText(Piece * p);
     static std::string getText(PieceListText & text);
     static void debugPrint(std::string const& text);
 };

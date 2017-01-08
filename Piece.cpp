@@ -115,3 +115,8 @@ void Piece::setFont(QFont const& font)
     mFont = font;
 }
 
+Piece * Piece::getDeepCopy()
+{
+    return new Piece(mFileName, mLength, mFilePos, mNext, mFont, mIsDummy);
+}
+

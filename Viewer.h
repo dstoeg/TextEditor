@@ -4,6 +4,7 @@
 #include "PieceListText.h"
 #include "UpdateEvent.h"
 #include "Selection.h"
+#include "Clipboard.h"
 #include <QObject>
 #include <QString>
 #include <QKeyEvent>
@@ -109,6 +110,8 @@ private:
     Selection mSel;
     Position mCaret;
     Position mLastPos;     // last mouse position: used during mouse dragging
+    ClipBoard mClipBoard;
+
 
     //--------------------------------------------------------------------------
     // constants

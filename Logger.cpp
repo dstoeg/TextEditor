@@ -56,3 +56,16 @@ void Logger::debugPrint(std::string const& text)
 {
     qDebug() << QString::fromStdString(text) << "\n";
 }
+
+void Logger::dumpText(Piece * p)
+{
+    Piece * piece = p;
+    QString str;
+    str += "|";
+    while (piece != nullptr)
+    {
+        str += QString::fromStdString(piece->getText()) + "|";
+        piece = piece->getNext();
+    }
+    qDebug() << str;
+}
